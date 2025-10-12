@@ -1,0 +1,32 @@
+/* Estilos globais para o Leaflet */
+@import 'leaflet/dist/leaflet.css';
+
+/* Correção para ícones do Leaflet */
+:global(.leaflet-default-icon-path) {
+  background-image: url('leaflet/dist/images/marker-icon.png');
+}
+
+/* Reset básico */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilos personalizados para tooltips */
+.leaflet-popup-content {
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.leaflet-popup-content h4 {
+  color: #CF4A46 !important;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.leaflet-popup-content p {
+  margin: 4px 0;
+  color: #555;
+}
