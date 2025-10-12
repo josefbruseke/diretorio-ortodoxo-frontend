@@ -2,6 +2,9 @@ import type { PageLoad } from './$types.js';
 import { dataService } from '$lib/dataService.js';
 import { error } from '@sveltejs/kit';
 
+export const prerender = false;
+export const ssr = false;
+
 export const load: PageLoad = async ({ params, fetch }) => {
   const id = parseInt(params.id);
   

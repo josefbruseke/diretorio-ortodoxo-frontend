@@ -1,0 +1,19 @@
+---
+deployment:
+  tasks:
+    # Set the deployment path - cPanel will use the repository owner's home directory
+    - export DEPLOYPATH=$HOME/public_html/
+    
+    # Install dependencies
+    - /usr/bin/node --version
+    - /usr/bin/npm --version
+    - /usr/bin/npm install
+    
+    # Build the SvelteKit application
+    - /usr/bin/npm run build
+    
+    # Copy the built files to the deployment path
+    - /bin/cp -R build/* $DEPLOYPATH
+    
+    # Copy .htaccess for SPA routing
+    - /bin/cp .htaccess $DEPLOYPATH
