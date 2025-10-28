@@ -31,7 +31,7 @@
 
   async function handleResetRequest() {
     if (!email) {
-      error = 'Please enter your email address';
+      error = 'Por favor, insira seu endereço de e-mail';
       return;
     }
 
@@ -47,11 +47,11 @@
       if (resetError) {
         error = resetError.message;
       } else {
-        message = 'If this email address is registered in our system, you will receive a password reset link in your email.';
+        message = 'Se este endereço de e-mail estiver registrado em nosso sistema, você receberá um link de redefinição de senha em seu e-mail.';
         email = ''; // Clear the email field
       }
     } catch (err) {
-      error = 'An unexpected error occurred';
+      error = 'Ocorreu um erro inesperado';
     } finally {
       loading = false;
     }
@@ -59,17 +59,17 @@
 
   async function handlePasswordUpdate() {
     if (!newPassword || !confirmPassword) {
-      error = 'Please fill in all fields';
+      error = 'Por favor, preencha todos os campos';
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      error = 'Passwords do not match';
+      error = 'As senhas não coincidem';
       return;
     }
 
     if (newPassword.length < 6) {
-      error = 'Password must be at least 6 characters long';
+      error = 'A senha deve ter pelo menos 6 caracteres';
       return;
     }
 
@@ -85,7 +85,7 @@
       if (updateError) {
         error = updateError.message;
       } else {
-        message = 'Password updated successfully! You can now log in with your new password.';
+        message = 'Senha atualizada com sucesso! Agora você pode fazer login com sua nova senha.';
         newPassword = '';
         confirmPassword = '';
         // Redirect to admin login after a delay
@@ -94,7 +94,7 @@
         }, 3000);
       }
     } catch (err) {
-      error = 'An unexpected error occurred';
+      error = 'Ocorreu um erro inesperado';
     } finally {
       loading = false;
     }
@@ -233,9 +233,9 @@
 <div class="reset-container">
   <h2>
     {#if isResetMode}
-      Set New Password
+      Definir Nova Senha
     {:else}
-      Reset Password
+      Redefinir Senha
     {/if}
   </h2>
 
@@ -251,13 +251,13 @@
     <!-- Password Update Form (when user clicks email link) -->
     <form on:submit|preventDefault={handlePasswordUpdate}>
       <div class="form-group">
-        <label for="newPassword">New Password:</label>
+        <label for="newPassword">Nova Senha:</label>
         <div class="password-field">
           <input
             type={showNewPassword ? 'text' : 'password'}
             id="newPassword"
             bind:value={newPassword}
-            placeholder="Enter your new password"
+            placeholder="Digite sua nova senha"
             required
           />
           <button
@@ -265,18 +265,18 @@
             class="password-toggle"
             on:click={() => showNewPassword = !showNewPassword}
           >
-            {showNewPassword ? 'Hide' : 'Show'}
+            {showNewPassword ? 'Ocultar' : 'Mostrar'}
           </button>
         </div>
       </div>
       <div class="form-group">
-        <label for="confirmPassword">Confirm New Password:</label>
+        <label for="confirmPassword">Confirmar Nova Senha:</label>
         <div class="password-field">
           <input
             type={showConfirmPassword ? 'text' : 'password'}
             id="confirmPassword"
             bind:value={confirmPassword}
-            placeholder="Confirm your new password"
+            placeholder="Confirme sua nova senha"
             required
           />
           <button
@@ -284,40 +284,40 @@
             class="password-toggle"
             on:click={() => showConfirmPassword = !showConfirmPassword}
           >
-            {showConfirmPassword ? 'Hide' : 'Show'}
+            {showConfirmPassword ? 'Ocultar' : 'Mostrar'}
           </button>
         </div>
       </div>
       <button type="submit" class="reset-btn" disabled={loading}>
-        {loading ? 'Updating...' : 'Update Password'}
+        {loading ? 'Atualizando...' : 'Atualizar Senha'}
       </button>
     </form>
   {:else}
     <!-- Password Reset Request Form -->
     <form on:submit|preventDefault={handleResetRequest}>
       <div class="form-group">
-        <label for="email">Email Address:</label>
+        <label for="email">Endereço de E-mail:</label>
         <input
           type="email"
           id="email"
           bind:value={email}
-          placeholder="Enter your email address"
+          placeholder="Digite seu endereço de e-mail"
           required
         />
       </div>
       <button type="submit" class="reset-btn" disabled={loading}>
-        {loading ? 'Sending...' : 'Send Reset Email'}
+        {loading ? 'Enviando...' : 'Enviar E-mail de Redefinição'}
       </button>
     </form>
   {/if}
 
   <button type="button" class="back-btn" on:click={goBack}>
-    Back to Admin
+    Voltar ao Admin
   </button>
 
   {#if !isResetMode}
     <p class="info">
-      Enter your email address and we'll send you a secure link to reset your password.
+      Digite seu endereço de e-mail e enviaremos um link seguro para redefinir sua senha.
     </p>
   {/if}
 </div>
