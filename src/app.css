@@ -6,6 +6,22 @@
   background-image: url('leaflet/dist/images/marker-icon.png');
 }
 
+/* Paleta de Cores */
+:root {
+  /* Cores Principais */
+  --cor-ouro-bizantino: #A67C00;
+  --cor-azul-constantinopolitano: #2A4D7A;
+  --cor-azul-marinho-escuro: #2C3E50;
+  --cor-cinza-neve: #F2F2F2;
+  --cor-turquesa-liturgico: #4C8EA1;
+  --cor-vermelho-bizantino: #C62828;
+  
+  /* Tipografia */
+  --font-heading: 'Roboto', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+  --font-quote: 'Open Sans', sans-serif;
+}
+
 /* Reset básico */
 * {
   box-sizing: border-box;
@@ -15,18 +31,121 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--cor-azul-marinho-escuro);
+  background-color: var(--cor-cinza-neve);
+  line-height: 1.6;
+}
+
+/* Tipografia - Cabeçalhos */
+h1 {
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: var(--cor-azul-constantinopolitano);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--cor-azul-constantinopolitano);
+  line-height: 1.3;
+  margin-bottom: 0.875rem;
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cor-azul-marinho-escuro);
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+
+h4 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--cor-azul-marinho-escuro);
+  line-height: 1.4;
+  margin-bottom: 0.625rem;
+}
+
+h5 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cor-azul-marinho-escuro);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+/* Lead Text */
+.lead {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--cor-azul-marinho-escuro);
+  line-height: 1.6;
+}
+
+/* Blockquotes */
+blockquote {
+  font-family: var(--font-quote);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--cor-azul-marinho-escuro);
+  border-left: 4px solid var(--cor-ouro-bizantino);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+
 /* Estilos personalizados para tooltips */
 .leaflet-popup-content {
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: var(--font-body);
 }
 
 .leaflet-popup-content h4 {
-  color: #CF4A46 !important;
+  color: var(--cor-vermelho-bizantino) !important;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
 .leaflet-popup-content p {
   margin: 4px 0;
-  color: #555;
+  color: var(--cor-azul-marinho-escuro);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+  }
+  
+  h4 {
+    font-size: 1.25rem;
+  }
+  
+  h5 {
+    font-size: 1.125rem;
+  }
+  
+  .lead {
+    font-size: 1.125rem;
+  }
 }

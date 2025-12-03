@@ -97,9 +97,9 @@
     // Adiciona círculo do raio
     radiusCircle = L.default.circle(userLocation, {
       radius: radiusKm * 1000, // Converte km para metros
-      fillColor: '#CF4A46',
+      fillColor: '#4C8EA1',
       fillOpacity: 0.1,
-      color: '#CF4A46',
+      color: '#2A4D7A',
       weight: 2,
       opacity: 0.6
     }).addTo(map);
@@ -329,8 +329,8 @@
   .loading-spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #CF4A46;
+    border: 4px solid var(--cor-cinza-neve);
+    border-top: 4px solid var(--cor-azul-constantinopolitano);
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
@@ -361,13 +361,13 @@
   
   :global(.marker-popup h4) {
     margin: 0 0 8px 0;
-    color: #CF4A46;
+    color: var(--cor-azul-constantinopolitano);
     font-size: 1rem;
   }
 
   :global(.user-location-popup h4) {
     margin: 0 0 8px 0;
-    color: #CF4A46;
+    color: var(--cor-azul-constantinopolitano);
     font-size: 1rem;
   }
 
@@ -401,7 +401,7 @@
   }
 
   :global(.details-button) {
-    background: #CF4A46;
+    background: var(--cor-azul-constantinopolitano);
     color: white !important;
     text-decoration: none !important;
     padding: 8px 16px;
@@ -410,18 +410,18 @@
     font-weight: 600;
     display: inline-block;
     transition: all 0.3s;
-    border: 1px solid #CF4A46;
+    border: 1px solid var(--cor-azul-constantinopolitano);
   }
 
   :global(.details-button:hover) {
-    background: #CF4A46;
-    border-color: #CF4A46;
+    background: var(--cor-azul-marinho-escuro);
+    border-color: var(--cor-azul-marinho-escuro);
     transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(207, 74, 70, 0.3);
+    box-shadow: 0 2px 6px rgba(42, 77, 122, 0.3);
   }
 
   :global(.popup-link) {
-    color: #CF4A46 !important;
+    color: var(--cor-azul-constantinopolitano) !important;
     text-decoration: none !important;
     font-weight: 500;
   }
@@ -432,48 +432,48 @@
 
   /* Custom marker cluster colors */
   :global(.marker-cluster-small) {
-    background-color: rgba(207, 74, 70, 0.6);
-    border: 2px solid #CF4A46;
+    background-color: rgba(42, 77, 122, 0.6);
+    border: 2px solid var(--cor-azul-constantinopolitano);
   }
 
   :global(.marker-cluster-small div) {
-    background-color: rgba(207, 74, 70, 0.6);
+    background-color: rgba(42, 77, 122, 0.6);
     color: white;
     font-weight: bold;
     text-align: center;
   }
 
   :global(.marker-cluster-medium) {
-    background-color: rgba(207, 74, 70, 0.7);
-    border: 2px solid #CF4A46;
+    background-color: rgba(42, 77, 122, 0.7);
+    border: 2px solid var(--cor-azul-constantinopolitano);
   }
 
   :global(.marker-cluster-medium div) {
-    background-color: rgba(207, 74, 70, 0.7);
+    background-color: rgba(42, 77, 122, 0.7);
     color: white;
     font-weight: bold;
     text-align: center;
   }
 
   :global(.marker-cluster-large) {
-    background-color: rgba(207, 74, 70, 0.8);
-    border: 2px solid #CF4A46;
+    background-color: rgba(42, 77, 122, 0.8);
+    border: 2px solid var(--cor-azul-constantinopolitano);
   }
 
   :global(.marker-cluster-large div) {
-    background-color: rgba(207, 74, 70, 0.8);
+    background-color: rgba(42, 77, 122, 0.8);
     color: white;
     font-weight: bold;
     text-align: center;
   }
 
   :global(.marker-cluster) {
-    background-color: rgba(207, 74, 70, 0.9);
-    border: 2px solid #CF4A46;
+    background-color: rgba(42, 77, 122, 0.9);
+    border: 2px solid var(--cor-azul-constantinopolitano);
   }
 
   :global(.marker-cluster div) {
-    background-color: rgba(207, 74, 70, 0.9);
+    background-color: rgba(42, 77, 122, 0.9);
     color: white;
     font-weight: bold;
     text-align: center;
