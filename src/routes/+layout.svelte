@@ -3,84 +3,8 @@
 </script>
 
 <style>
-  .ecclesia-header {
-    background: linear-gradient(to bottom, var(--cor-azul-constantinopolitano) 0%, var(--cor-azul-marinho-escuro) 100%);
-    padding: 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .header-banner {
-    background: url('/header-muttergottes.jpg') center center / cover no-repeat;
-    height: 200px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .header-banner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, rgba(42, 77, 122, 0.7) 0%, rgba(44, 62, 80, 0.85) 100%);
-  }
-
-  .logo-container {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-  }
-
-  .logo {
-    height: 120px;
-    width: auto;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
-  }
-
-  .site-title {
-    color: white;
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-top: 0.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  }
-
-  .nav-bar {
-    background: var(--cor-azul-marinho-escuro);
-    padding: 0.75rem 0;
-  }
-
-  .nav-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    padding: 0 1rem;
-  }
-
-  .nav-link {
-    color: white;
-    text-decoration: none;
-    font-family: var(--font-heading);
-    font-weight: 400;
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-  }
-
-  .nav-link:hover {
-    background: var(--cor-ouro-bizantino);
-    color: white;
-  }
-
   main {
-    min-height: calc(100vh - 280px);
+    min-height: 100vh;
   }
 
   .footer {
@@ -137,27 +61,6 @@
   }
 
   @media (max-width: 768px) {
-    .header-banner {
-      height: 150px;
-    }
-
-    .logo {
-      height: 80px;
-    }
-
-    .site-title {
-      font-size: 1.125rem;
-    }
-
-    .nav-content {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .nav-link {
-      text-align: center;
-    }
-
     .jurisdiction-seals {
       justify-content: center;
     }
@@ -167,15 +70,6 @@
     }
   }
 </style>
-
-<header class="ecclesia-header">
-  <div class="header-banner">
-    <div class="logo-container">
-      <img src="/ecclesia-logo.png" alt="Ecclesia - Diretório Ortodoxo Brasil" class="logo" />
-      <div class="site-title">Diretório Ortodoxo Brasil</div>
-    </div>
-  </div>
-</header>
 
 <main>
   <slot />

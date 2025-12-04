@@ -394,12 +394,6 @@
         <a href="#footer" class="nav-link">CONTATO</a>
       </nav>
     </div>
-    
-    <div class="breadcrumb">
-      <a href="/">DIRETÓRIO ORTODOXO</a>
-      <span>/</span>
-      <span>BRASIL</span>
-    </div>
   </header>
 
   <main class="main-content">
@@ -975,35 +969,34 @@
   }
 
   .header {
-    background: linear-gradient(135deg, var(--cor-azul-constantinopolitano), var(--cor-azul-marinho-escuro));
+    background: linear-gradient(135deg, rgba(42, 77, 122, 0.8), rgba(42, 77, 122, 0.8)), url('/header-muttergottes.jpg');
+    background-size: cover;
+    background-position: center 40%;
+    background-repeat: no-repeat;
     color: #f5f3f0;
-    padding: 2rem;
+    padding: 3rem 2rem;
     position: relative;
     border-bottom: 4px solid var(--cor-ouro-bizantino);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .header-content {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-top: 8rem;
   }
 
   .logo-section .main-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin: 0;
     font-weight: 700;
     letter-spacing: 3px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5);
   }
-
-  .subtitle {
-    margin: 0.5rem 0 0 0;
-    font-size: 1rem;
-    opacity: 0.9;
-    font-style: italic;
-  }
-
   .header-nav {
     display: flex;
     gap: 2rem;
@@ -1018,6 +1011,7 @@
     padding: 0.5rem 1rem;
     border-radius: 4px;
     transition: background-color 0.3s;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
   }
 
   .nav-link:hover, .nav-link.active {
@@ -1026,12 +1020,15 @@
 
   .breadcrumb {
     font-size: 0.85rem;
-    opacity: 0.8;
+    opacity: 0.9;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 2rem;
   }
 
   .breadcrumb a {
     color: #f5f3f0;
     text-decoration: none;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
   }
 
   .breadcrumb a:hover {
@@ -1262,6 +1259,7 @@
   }
 
   .view-switch-btn:hover {
+    background: var(--cor-ouro-bizantino);
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(207, 74, 70, 0.3);
   }
@@ -1773,17 +1771,18 @@
     }
     
     .header {
-      padding: 1.5rem 1rem;
+      padding: 2rem 1rem;
     }
     
     .header-content {
       flex-direction: column;
       gap: 1rem;
       text-align: center;
+      padding-top: 1.5rem;
     }
     
     .logo-section .main-title {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       letter-spacing: 2px;
     }
     
@@ -2306,6 +2305,7 @@
   }
 
   .clear-filters-btn:hover {
+    background: var(--cor-ouro-bizantino);
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(207, 74, 70, 0.3);
   }

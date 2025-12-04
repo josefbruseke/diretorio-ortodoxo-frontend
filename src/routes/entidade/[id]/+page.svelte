@@ -34,11 +34,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>{entidade.nome} - Diretório Ortodoxo</title>
-  <meta name="description" content="Detalhes sobre {entidade.nome} - {getTipoEntidadeLabel(entidade.tipo)} ortodoxa em {entidade.cidade}, {entidade.estado}" />
-</svelte:head>
-
 <div class="container">
   <header class="detail-header">
     <div class="breadcrumb">
@@ -435,7 +430,7 @@
   }
 
   .modal-close:hover {
-    background: var(--cor-azul-constantinopolitano);
+    background: var(--cor-ouro-bizantino);
     transform: scale(1.1);
   }
 
@@ -498,7 +493,7 @@
   }
 
   .carousel-nav:hover:not(:disabled) {
-    background: var(--cor-azul-constantinopolitano);
+    background: var(--cor-ouro-bizantino);
     transform: translateY(-50%) scale(1.1);
   }
 
@@ -668,7 +663,7 @@
   }
 
   .back-button:hover {
-    background: var(--cor-azul-constantinopolitano);
+    background: var(--cor-ouro-bizantino);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(42, 77, 122, 0.3);
   }
