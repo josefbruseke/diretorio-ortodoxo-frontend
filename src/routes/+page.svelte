@@ -87,11 +87,11 @@
   });
 
   function updateFilterCounts() {
-    // Tipos de entidades - usar todos os tipos da API
+    // Tipos de entidades - usar todos os tipos da API/Supabase
     const novostipos: Record<string, number> = { 'All': entidades.length };
     
-    if (isUsingApi && allTipos.length > 0) {
-      // Usar todos os tipos da API
+    if ((isUsingApi || isUsingSupabase) && allTipos.length > 0) {
+      // Usar todos os tipos da API ou Supabase
       allTipos.forEach(tipo => {
         novostipos[tipo] = entidades.filter(e => e.tipo === tipo).length;
       });
@@ -104,35 +104,37 @@
     }
     tipos = novostipos;
 
-    // Jurisdições - usar todas as jurisdições da API
+    // Jurisdições - usar todas as jurisdições da API/Supabase
     const novasJurisdicoes: Record<string, number> = { 'All': entidades.length };
     
-    if (isUsingApi && allJurisdicoes.length > 0) {
+    if ((isUsingApi || isUsingSupabase) && allJurisdicoes.length > 0) {
       // Mapear jurisdições da API para formato local e contar
       allJurisdicoes.forEach(jurisdicaoApi => {
-        const jurisdicaoLocal = mapJurisdicaoApiToLocal(jurisdicaoApi);
+        // When using Supabase, jurisdicaoApi is already in enum format (e.g., 'PatriarcadoEcumenico')
+        // When using API, we need to map from display name to enum format
+        const jurisdicaoLocal = isUsingSupabase ? jurisdicaoApi : mapJurisdicaoApiToLocal(jurisdicaoApi);
         novasJurisdicoes[jurisdicaoLocal] = entidades.filter(e => e.diocese.jurisdicao === jurisdicaoLocal).length;
       });
     } else {
       // Fallback: usar apenas jurisdições que existem nas entidades
-      const jurisdicoesUnicas = [...new Set(entidades.map(e => e.diocese.jurisdicao))];
+      const jurisdicoesUnicas = [...new Set(entidades.map(e => e.diocese.jurisdicao))].filter(j => j); // Filter out empty values
       jurisdicoesUnicas.forEach(jurisdicao => {
         novasJurisdicoes[jurisdicao] = entidades.filter(e => e.diocese.jurisdicao === jurisdicao).length;
       });
     }
     jurisdicoes = novasJurisdicoes;
 
-    // Estados - usar todos os estados da API
+    // Estados - usar todos os estados da API/Supabase
     const novosEstados: Record<string, number> = { 'All': entidades.length };
     
-    if (isUsingApi && allEstados.length > 0) {
-      // Usar todos os estados da API
+    if ((isUsingApi || isUsingSupabase) && allEstados.length > 0) {
+      // Usar todos os estados da API ou Supabase
       allEstados.forEach(estado => {
         novosEstados[estado] = entidades.filter(e => e.estado === estado).length;
       });
     } else {
       // Fallback: usar apenas estados que existem nas entidades
-      const estadosUnicos = [...new Set(entidades.map(e => e.estado))];
+      const estadosUnicos = [...new Set(entidades.map(e => e.estado))].filter(e => e); // Filter out empty/null
       estadosUnicos.forEach(estado => {
         novosEstados[estado] = entidades.filter(e => e.estado === estado).length;
       });
@@ -466,7 +468,7 @@
             {#if jurisdicoesDropdownOpen}
               <div class="dropdown-menu">
                 {#each Object.entries(jurisdicoes) as [jurisdicao, count]}
-                  {#if jurisdicao !== 'All'}
+                  {#if jurisdicao !== 'All' && jurisdicao && jurisdicao.trim() !== ''}
                     <label class="dropdown-item">
                       <input 
                         type="checkbox" 
@@ -609,7 +611,7 @@
               {#if jurisdicoesDropdownOpen}
                 <div class="dropdown-menu">
                   {#each Object.entries(jurisdicoes) as [jurisdicao, count]}
-                    {#if jurisdicao !== 'All'}
+                    {#if jurisdicao !== 'All' && jurisdicao && jurisdicao.trim() !== ''}
                       <label class="dropdown-item">
                         <input 
                           type="checkbox" 

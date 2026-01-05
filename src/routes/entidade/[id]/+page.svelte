@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageProps } from './$types.js';
-  import { getTipoEntidadeLabel, getJurisdicaoLabel, formatTelefone, formatCEP, getTipoEntidadeIconForDisplay } from '$lib/utils.js';
+  import { getTipoEntidadeLabel, getJurisdicaoLabel, formatTelefone, formatCEP, getTipoEntidadeIconForDisplay, formatDate } from '$lib/utils.js';
   
   let { data }: PageProps = $props();
   
@@ -47,7 +47,14 @@
     <div class="header-content">
       <div class="entity-title">
         <h1>{entidade.nome}</h1>
-        <p class="entity-type">{getTipoEntidadeLabel(entidade.tipo)} • {entidade.cidade}, {entidade.estado}</p>
+        <div class="title-meta">
+          <p class="entity-type">{getTipoEntidadeLabel(entidade.tipo)} • {entidade.cidade}, {entidade.estado}</p>
+          {#if entidade.status}
+            <span class="status-badge" class:status-ativa={entidade.status === 'ativa'} class:status-desativada={entidade.status === 'desativada'}>
+              {entidade.status === 'ativa' ? '✓ Ativa' : '✗ Desativada'}
+            </span>
+          {/if}
+        </div>
       </div>
     </div>
   </header>
@@ -66,8 +73,24 @@
             <dt>Tipo:</dt>
             <dd>{getTipoEntidadeLabel(entidade.tipo)}</dd>
           </div>
+          {#if entidade.status}
+            <div class="info-row">
+              <dt>Status:</dt>
+              <dd>
+                <span class="status-text" class:status-ativa-text={entidade.status === 'ativa'} class:status-desativada-text={entidade.status === 'desativada'}>
+                  {entidade.status === 'ativa' ? '✓ Ativa' : '✗ Desativada'}
+                </span>
+              </dd>
+            </div>
+          {/if}
+          {#if entidade.ultima_atualizacao}
+            <div class="info-row">
+              <dt>Atualizado em:</dt>
+              <dd>{formatDate(entidade.ultima_atualizacao)}</dd>
+            </div>
+          {/if}
           <div class="info-row">
-            <dt>Reitor/Responsável:</dt>
+            <dt>Reitor:</dt>
             <dd>{entidade.reitor}</dd>
           </div>
           <div class="info-row">
@@ -127,17 +150,8 @@
       <!-- Informações de Localização e Contato -->
       <section class="location-section">
         <div class="info-card">
-          <h2>Localização e Contato</h2>
+          <h2>Contato</h2>
           
-          <div class="contact-section">
-            <h3>📍 Endereço</h3>
-            <div class="address">
-              <p>{entidade.endereco}</p>
-              <p>{entidade.cidade}, {entidade.estado}</p>
-              <p>CEP: {formatCEP(entidade.cep)}</p>
-            </div>
-          </div>
-
           {#if entidade.telefone}
             <div class="contact-section">
               <h3>📞 Telefone</h3>
@@ -156,6 +170,62 @@
             <div class="contact-section">
               <h3>🌐 Website</h3>
               <p><a href="{entidade.website}" target="_blank" rel="noopener noreferrer" class="contact-link">Visitar Website</a></p>
+            </div>
+          {/if}
+
+          {#if entidade.facebook}
+            <div class="contact-section">
+              <h3>📘 Facebook</h3>
+              <p><a href="{entidade.facebook}" target="_blank" rel="noopener noreferrer" class="contact-link">Ver Página no Facebook</a></p>
+            </div>
+          {/if}
+
+          {#if entidade.instagram}
+            <div class="contact-section">
+              <h3>📷 Instagram</h3>
+              <p><a href="{entidade.instagram}" target="_blank" rel="noopener noreferrer" class="contact-link">Ver Perfil no Instagram</a></p>
+            </div>
+          {/if}
+        </div>
+      </section>
+
+      <!-- Endereço Section -->
+      <section class="address-section">
+        <div class="info-card">
+          <h2>Endereço</h2>
+          
+          <div class="address-block">
+            <p>{entidade.endereco}</p>
+            <p>{entidade.cidade}, {entidade.estado}</p>
+            <p>CEP: {formatCEP(entidade.cep)}</p>
+          </div>
+          
+          {#if entidade.link_maps}
+            <div class="map-container">
+              <a href={entidade.link_maps} target="_blank" rel="noopener noreferrer" class="map-button">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <div>
+                  <strong>Ver no Google Maps</strong>
+                  <p>Abrir em nova aba</p>
+                </div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          {:else}
+            <div class="map-warning">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <p>Local exato não informado ou inexiste. Busque entrar em contato com o reitor responsável.</p>
             </div>
           {/if}
         </div>
@@ -301,11 +371,43 @@
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   }
 
+  .title-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
   .entity-type {
     margin: 0.5rem 0 0 0;
     font-size: 1.1rem;
     opacity: 0.9;
     font-weight: 500;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin-top: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .status-ativa {
+    background-color: #28a745;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .status-desativada {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.3);
   }
 
   .main-content {
@@ -605,6 +707,28 @@
     margin: 0;
   }
 
+  .status-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .status-ativa-text {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .status-desativada-text {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
   .description {
     color: var(--cor-azul-marinho-escuro);
     font-size: 1.05rem;
@@ -644,6 +768,104 @@
 
   .contact-link:hover {
     text-decoration: underline;
+  }
+
+  .address-block {
+    background: var(--cor-cinza-neve);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .address-block p {
+    margin: 0.5rem 0;
+    color: var(--cor-azul-marinho-escuro);
+    font-size: 1.05rem;
+  }
+
+  .address-block p:first-child {
+    margin-top: 0;
+  }
+
+  .address-block p:last-child {
+    margin-bottom: 0;
+  }
+
+  .map-container {
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+
+  .map-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--cor-azul-constantinopolitano), #1e5a8e);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(42, 77, 122, 0.2);
+  }
+
+  .map-button:hover {
+    background: linear-gradient(135deg, #1e5a8e, var(--cor-azul-constantinopolitano));
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(42, 77, 122, 0.3);
+  }
+
+  .map-button > svg:first-child {
+    flex-shrink: 0;
+  }
+
+  .map-button > div {
+    flex: 1;
+    text-align: center;
+  }
+
+  .map-button strong {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .map-button p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+  }
+
+  .map-button > svg:last-child {
+    flex-shrink: 0;
+  }
+
+  .map-container iframe {
+    display: block;
+  }
+
+  .map-warning {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+    border-radius: 8px;
+    border: 2px dashed var(--cor-ouro-bizantino);
+  }
+
+  .map-warning svg {
+    color: var(--cor-ouro-bizantino);
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+
+  .map-warning p {
+    margin: 0;
+    color: var(--cor-azul-marinho-escuro);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.6;
   }
 
   .back-section {

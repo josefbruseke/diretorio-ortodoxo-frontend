@@ -57,7 +57,8 @@
       descricao: '',
       latitude: undefined,
       longitude: undefined,
-      url_foto: null
+      url_foto: null,
+      status: 'ativa'
     };
     originalAddress = '';
     
@@ -527,6 +528,17 @@
           {#if validationErrors.tipo}
             <span class="field-error">{validationErrors.tipo}</span>
           {/if}
+        </div>
+        <div class="form-group">
+          <label for="status">Status:</label>
+          <select 
+            id="status" 
+            bind:value={editedEntidade.status}
+          >
+            <option value="">Selecione um status</option>
+            <option value="ativa">Ativa</option>
+            <option value="desativada">Desativada</option>
+          </select>
         </div>
         <div class="form-group">
           <label for="endereco">Endereço: <span class="required">*</span></label>

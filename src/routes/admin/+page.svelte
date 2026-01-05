@@ -57,6 +57,7 @@
           url_foto: e.url_foto,
           latitude: e.latitude,
           longitude: e.longitude,
+          status: e.status,
           diocese: e.diocese ? {
             id: e.diocese.id,
             nome: e.diocese.nome,
@@ -118,7 +119,8 @@
         descricao: updatedEntidade.descricao,
         latitude: updatedEntidade.latitude,
         longitude: updatedEntidade.longitude,
-        url_foto: updatedEntidade.url_foto
+        url_foto: updatedEntidade.url_foto,
+        status: updatedEntidade.status
       };
       
       let savedEntidade: ApiEntidade | undefined;
@@ -145,19 +147,16 @@
               descricao: savedEntidade.descricao,
               latitude: savedEntidade.latitude,
               longitude: savedEntidade.longitude,
-              url_foto: savedEntidade.url_foto
+              url_foto: savedEntidade.url_foto,
+              status: savedEntidade.status
             };
             entidades = entidades; // Trigger reactivity
           }
         }
       } else {
         // Create new
-        // For create, we need to include id_diocese
-        const createData = {
-          ...dataToSave,
-          id_diocese: 1 // Default diocese, should be made configurable
-        };
-        savedEntidade = await dataService.createEntidade(createData);
+        // No need to include id_diocese as it doesn't exist in new schema
+        savedEntidade = await dataService.createEntidade(dataToSave);
         
         if (savedEntidade) {
           // Add to the list
@@ -580,6 +579,27 @@
     background-color: #5a6268;
   }
 
+  .status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  .status-ativa {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .status-desativada {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
   .forgot-password {
     text-align: center;
     margin-top: 1.5rem;
@@ -639,6 +659,7 @@
             <th>Tipo</th>
             <th>Cidade</th>
             <th>Estado</th>
+            <th>Status</th>
             <th>Latitude</th>
             <th>Longitude</th>
             <th>Ações</th>
@@ -652,6 +673,11 @@
               <td>{entidade.tipo}</td>
               <td>{entidade.cidade}</td>
               <td>{entidade.estado}</td>
+              <td>
+                <span class="status-badge" class:status-ativa={entidade.status === 'ativa'} class:status-desativada={entidade.status === 'desativada'}>
+                  {entidade.status || 'N/A'}
+                </span>
+              </td>
               <td>{entidade.latitude ? entidade.latitude.toFixed(6) : '-'}</td>
               <td>{entidade.longitude ? entidade.longitude.toFixed(6) : '-'}</td>
               <td><button on:click={() => openEditEntidadeModal(entidade)}>Edit</button></td>
