@@ -23,11 +23,11 @@ export class DataService {
         
         // Apply filters
         let filtered = entidades.filter(entidade => {
-          if (filtros.estado && entidade.estado !== filtros.estado) return false;
+          if (filtros.estado && entidade.uf !== filtros.estado) return false;
           if (filtros.cidade && entidade.cidade !== filtros.cidade) return false;
           if (filtros.tipo && entidade.tipo !== filtros.tipo) return false;
-          if (filtros.dioceseId && entidade.id_diocese !== filtros.dioceseId) return false;
-          if (filtros.jurisdicao && entidade.diocese?.jurisdicao !== filtros.jurisdicao) return false;
+          // Note: dioceseId filter won't work with new schema since id_diocese doesn't exist
+          if (filtros.jurisdicao && entidade.patriarcado !== filtros.jurisdicao) return false;
           return true;
         });
         
@@ -254,18 +254,20 @@ export class DataService {
       try {
         // Map data to Supabase format (excluding url_foto as it's in fotosentidade table)
         const supabaseData = {
-          nome: data.nome,
+          nome_comunidade: data.nome,
           tipo: data.tipo,
           endereco: data.endereco,
           cidade: data.cidade,
-          estado: data.estado,
+          uf: data.estado || data.uf,
           cep: data.cep,
           telefone: data.telefone,
           email: data.email,
           website: data.website,
           descricao: data.descricao,
           latitude: data.latitude,
-          longitude: data.longitude
+          longitude: data.longitude,
+          status: data.status,
+          ultima_atualizacao: new Date().toISOString()
         };
         
         const result = await supabaseService.updateEntidade(id, supabaseData);
@@ -333,18 +335,28 @@ export class DataService {
   async createEntidade(data: any, fetchFn?: typeof fetch): Promise<any> {
     if (this.useSupabase) {
       try {
-        // Map data to Supabase format (excluding url_foto as it's in fotosentidade table)
+        // Map data to new Supabase format
         const supabaseData = {
-          id_diocese: data.id_diocese,
-          nome: data.nome,
+          nome_comunidade: data.nome || data.nome_comunidade,
           tipo: data.tipo,
+          santo_padroeiro: data.santo_padroeiro,
+          jurisdicao_imediata: data.jurisdicao_imediata,
+          patriarcado: data.patriarcado,
+          id_reitor: data.id_reitor,
+          reitor: data.reitor,
           endereco: data.endereco,
           cidade: data.cidade,
-          estado: data.estado,
+          uf: data.estado || data.uf,
           cep: data.cep,
           telefone: data.telefone,
           email: data.email,
           website: data.website,
+          facebook: data.facebook,
+          instagram: data.instagram,
+          status: data.status,
+          observacoes: data.observacoes,
+          ultima_atualizacao: new Date().toISOString(),
+          link_maps: data.link_maps,
           descricao: data.descricao,
           latitude: data.latitude,
           longitude: data.longitude

@@ -7,9 +7,9 @@ export type Jurisdicao =
 
 export type TipoEntidade = 
   | 'Catedral'
-  | 'Paroquia' 
+  | 'Paróquia' 
   | 'Capela'
-  | 'Missao'
+  | 'Missão'
   | 'Mosteiro';
 
 export interface Diocese {
@@ -31,9 +31,12 @@ export interface FotoEntidade {
 
 export interface EntidadeEclesiastica {
   id: number;
-  id_diocese: number;
+  id_diocese?: number; // Made optional as it doesn't exist in new schema
   nome: string;
   tipo: TipoEntidade;
+  santo_padroeiro?: string;
+  jurisdicao_imediata?: string;
+  patriarcado?: string;
   reitor: string;
   cep: string;
   estado: string;
@@ -42,6 +45,12 @@ export interface EntidadeEclesiastica {
   telefone: string;
   email: string;
   website: string;
+  facebook?: string;
+  instagram?: string;
+  status?: string;
+  observacoes?: string;
+  ultima_atualizacao?: string;
+  link_maps?: string;
   descricao: string;
   latitude?: number;
   longitude?: number;

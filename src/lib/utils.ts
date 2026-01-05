@@ -10,25 +10,25 @@ export const jurisdicaoLabels: Record<Jurisdicao, string> = {
 
 export const tipoEntidadeLabels: Record<string, string> = {
   'Catedral': 'Catedral',
-  'Paroquia': 'Paróquia',
+  'Paróquia': 'Paróquia',
   'Capela': 'Capela',
-  'Missao': 'Missão',
+  'Missão': 'Missão',
   'Mosteiro': 'Mosteiro'
 };
 
 export const tipoEntidadeIcons: Record<string, string> = {
   'Catedral': '/icon-catedral.png',
-  'Paroquia': '/icon-paroquia.png',
+  'Paróquia': '/icon-paroquia.png',
   'Capela': '/icon-capela.png',
-  'Missao': '/icon-missao.png',
+  'Missão': '/icon-missao.png',
   'Mosteiro': '/icon-monasterio.png'
 };
 
 export const tipoEntidadeSvgIcons: Record<string, string> = {
   'Catedral': '/icon-catedral.png',
-  'Paroquia': '/icon-paroquia.png',
+  'Paróquia': '/icon-paroquia.png',
   'Capela': '/icon-capela.png',
-  'Missao': '/icon-missao.png',
+  'Missão': '/icon-missao.png',
   'Mosteiro': '/icon-monasterio.png'
 };
 
@@ -83,4 +83,21 @@ export function formatCEP(cep: string | null): string {
     return `${numbers.slice(0, 5)}-${numbers.slice(5)}`;
   }
   return cep;
+}
+
+export function formatDate(dateString: string | null | undefined): string {
+  if (!dateString) return '';
+  
+  try {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  } catch (error) {
+    return '';
+  }
 }

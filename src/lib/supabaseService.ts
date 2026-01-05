@@ -9,20 +9,29 @@ import type {
 // Supabase table interfaces based on your actual schema
 export interface SupabaseEntidade {
   id: number;
-  id_diocese: number;
+  nome_comunidade: string;
+  tipo: 'Catedral' | 'Paróquia' | 'Mosteiro' | 'Missão' | 'Capela';
+  santo_padroeiro?: string;
+  jurisdicao_imediata?: string;
+  patriarcado?: string;
   id_reitor?: number;
-  nome: string;
-  tipo: 'Catedral' | 'Paroquia' | 'Mosteiro' | 'Missao' | 'Capela';
-  endereco?: string;
-  cep?: string;
-  cidade?: string;
-  estado?: string;
+  reitor?: string;
   telefone?: string;
   email?: string;
   website?: string;
-  descricao?: string;
+  facebook?: string;
+  instagram?: string;
+  status?: string;
+  observacoes?: string;
+  ultima_atualizacao?: string;
+  link_maps?: string;
+  cep?: string;
+  endereco?: string;
   latitude?: number;
   longitude?: number;
+  uf?: string;
+  cidade?: string;
+  descricao?: string;
 }
 
 export interface SupabaseDiocese {
@@ -81,15 +90,9 @@ class SupabaseService {
   // Entidades Eclesiásticas
   async getEntidades(limit = 1000): Promise<SupabaseEntidadeWithRelations[]> {
     const { data, error } = await supabase
-      .from('entidadeeclesiastica')
+      .from('entidade_eclesiastica')
       .select(`
         *,
-        diocese (
-          id,
-          nome,
-          jurisdicao,
-          loc_sede
-        ),
         clero:id_reitor (
           id,
           nome_completo,
@@ -115,20 +118,9 @@ class SupabaseService {
 
   async getEntidadeById(id: number): Promise<SupabaseEntidadeWithRelations | null> {
     const { data, error } = await supabase
-      .from('entidadeeclesiastica')
+      .from('entidade_eclesiastica')
       .select(`
         *,
-        diocese (
-          id,
-          nome,
-          jurisdicao,
-          loc_sede,
-          clero:id_bispo_titular (
-            id,
-            nome_completo,
-            titulo
-          )
-        ),
         clero:id_reitor (
           id,
           nome_completo,
@@ -154,10 +146,12 @@ class SupabaseService {
   }
 
   async getEntidadesByDiocese(dioceseId: number): Promise<SupabaseEntidade[]> {
+    // Note: Since the new schema doesn't have id_diocese,
+    // this method will need to be refactored or deprecated
     const { data, error } = await supabase
-      .from('entidadeeclesiastica')
+      .from('entidade_eclesiastica')
       .select('*')
-      .eq('id_diocese', dioceseId);
+      .eq('jurisdicao_imediata', dioceseId); // This won't work properly - needs redesign
 
     if (error) {
       console.error('Error fetching entidades by diocese:', error);
@@ -169,9 +163,9 @@ class SupabaseService {
 
   async getEntidadesByEstado(estado: string): Promise<SupabaseEntidade[]> {
     const { data, error } = await supabase
-      .from('entidadeeclesiastica')
+      .from('entidade_eclesiastica')
       .select('*')
-      .eq('estado', estado);
+      .eq('uf', estado);
 
     if (error) {
       console.error('Error fetching entidades by estado:', error);
@@ -252,27 +246,27 @@ class SupabaseService {
   // Utility functions
   async getEstados(): Promise<string[]> {
     const { data, error } = await supabase
-      .from('entidadeeclesiastica')
-      .select('estado')
-      .not('estado', 'is', null);
+      .from('entidade_eclesiastica')
+      .select('uf')
+      .not('uf', 'is', null);
 
     if (error) {
       console.error('Error fetching estados:', error);
       return [];
     }
 
-    const estados = [...new Set(data.map(item => item.estado))].filter(Boolean);
+    const estados = [...new Set(data.map(item => item.uf))].filter(Boolean);
     return estados.sort();
   }
 
   async getCidades(estado?: string): Promise<string[]> {
     let query = supabase
-      .from('entidadeeclesiastica')
+      .from('entidade_eclesiastica')
       .select('cidade')
       .not('cidade', 'is', null);
 
     if (estado) {
-      query = query.eq('estado', estado);
+      query = query.eq('uf', estado);
     }
 
     const { data, error } = await query;
@@ -287,7 +281,7 @@ class SupabaseService {
   }
 
   async getTipos(): Promise<string[]> {
-    return ['Catedral', 'Paroquia', 'Mosteiro', 'Missao', 'Capela'];
+    return ['Catedral', 'Paróquia', 'Mosteiro', 'Missão', 'Capela'];
   }
 
   async getJurisdicoes(): Promise<string[]> {
@@ -296,16 +290,16 @@ class SupabaseService {
       'PatriarcadoDeAntioquia', 
       'PatriarcadoDeMoscou',
       'PatriarcadoDaServia',
-      'IgrejaAutocefalaDaPolonia'
+      'IgrejaAutocefalaDoPolonia'
     ];
   }
 
   // Search functionality
   async searchEntidades(searchTerm: string): Promise<SupabaseEntidade[]> {
     const { data, error } = await supabase
-      .from('entidadeeclesiastica')
+      .from('entidade_eclesiastica')
       .select('*')
-      .or(`nome.ilike.%${searchTerm}%,cidade.ilike.%${searchTerm}%,endereco.ilike.%${searchTerm}%`)
+      .or(`nome_comunidade.ilike.%${searchTerm}%,cidade.ilike.%${searchTerm}%,endereco.ilike.%${searchTerm}%`)
       .limit(20);
 
     if (error) {
@@ -320,7 +314,7 @@ class SupabaseService {
   async getStats() {
     try {
       const [entidadesCount, diocesesCount, cleroCount] = await Promise.all([
-        supabase.from('entidadeeclesiastica').select('*', { count: 'exact', head: true }),
+        supabase.from('entidade_eclesiastica').select('*', { count: 'exact', head: true }),
         supabase.from('diocese').select('*', { count: 'exact', head: true }),
         supabase.from('clero').select('*', { count: 'exact', head: true })
       ]);
@@ -339,7 +333,7 @@ class SupabaseService {
   // Update methods for admin functionality
   async updateEntidade(id: number, data: Partial<SupabaseEntidade>): Promise<SupabaseEntidade> {
     const { data: result, error } = await supabase
-      .from('entidadeeclesiastica')
+      .from('entidade_eclesiastica')
       .update(data)
       .eq('id', id)
       .select()
@@ -388,7 +382,7 @@ class SupabaseService {
   // Create methods for admin functionality
   async createEntidade(data: Omit<SupabaseEntidade, 'id'>): Promise<SupabaseEntidade> {
     const { data: result, error } = await supabase
-      .from('entidadeeclesiastica')
+      .from('entidade_eclesiastica')
       .insert(data)
       .select()
       .single();
@@ -434,7 +428,7 @@ class SupabaseService {
   // Delete methods for admin functionality
   async deleteEntidade(id: number): Promise<void> {
     const { error } = await supabase
-      .from('entidadeeclesiastica')
+      .from('entidade_eclesiastica')
       .delete()
       .eq('id', id);
 
@@ -570,33 +564,65 @@ export function mapSupabaseEntidadeToLocal(supabaseEntidade: SupabaseEntidadeWit
           ordem: foto.ordem
         }))
     : [];
+  
+  // Map patriarcado text to Jurisdicao enum
+  const mapPatriarcadoToJurisdicao = (patriarcado: string | undefined): Jurisdicao => {
+    if (!patriarcado) return 'PatriarcadoEcumenico'; // default
+    
+    const p = patriarcado.trim().toLowerCase();
+    
+    if (p.includes('ecumênico') || p.includes('ecumenico')) {
+      return 'PatriarcadoEcumenico';
+    } else if (p.includes('antioquia')) {
+      return 'PatriarcadoDeAntioquia';
+    } else if (p.includes('moscou')) {
+      return 'PatriarcadoDeMoscou';
+    } else if (p.includes('sérvia') || p.includes('servia') || p.includes('sérvio')) {
+      return 'PatriarcadoDaServia';
+    } else if (p.includes('polônia') || p.includes('polonia') || p.includes('polónia')) {
+      return 'IgrejaAutocefalaDoPolonia';
+    }
+    return 'PatriarcadoEcumenico'; // default
+  };
+  
+  const jurisdicaoEnum = mapPatriarcadoToJurisdicao(supabaseEntidade.patriarcado);
     
   return {
     id: supabaseEntidade.id,
-    id_diocese: supabaseEntidade.id_diocese,
-    nome: supabaseEntidade.nome,
+    id_diocese: undefined, // Not in new schema
+    nome: supabaseEntidade.nome_comunidade,
     tipo: supabaseEntidade.tipo as TipoEntidade,
-    reitor: supabaseEntidade.clero?.nome_completo || '',
+    santo_padroeiro: supabaseEntidade.santo_padroeiro,
+    jurisdicao_imediata: supabaseEntidade.jurisdicao_imediata,
+    patriarcado: supabaseEntidade.patriarcado,
+    reitor: supabaseEntidade.reitor || supabaseEntidade.clero?.nome_completo || '',
     cep: supabaseEntidade.cep || '',
-    estado: supabaseEntidade.estado || '',
+    estado: supabaseEntidade.uf || '',
     cidade: supabaseEntidade.cidade || '',
     endereco: supabaseEntidade.endereco || '',
     telefone: supabaseEntidade.telefone || '',
     email: supabaseEntidade.email || '',
     website: supabaseEntidade.website || '',
+    facebook: supabaseEntidade.facebook,
+    instagram: supabaseEntidade.instagram,
+    status: supabaseEntidade.status,
+    observacoes: supabaseEntidade.observacoes,
+    ultima_atualizacao: supabaseEntidade.ultima_atualizacao,
+    link_maps: supabaseEntidade.link_maps,
     descricao: supabaseEntidade.descricao || '',
     latitude: supabaseEntidade.latitude,
     longitude: supabaseEntidade.longitude,
     url_foto: mainPhoto,
     fotos: fotos,
-    diocese: supabaseEntidade.diocese ? {
-      id: supabaseEntidade.diocese.id,
-      nome: supabaseEntidade.diocese.nome,
-      jurisdicao: supabaseEntidade.diocese.jurisdicao as Jurisdicao,
-      bispo: '', // Would need to fetch from clero table
+    // Create a fake diocese object for compatibility
+    diocese: {
+      id: 0,
+      nome: supabaseEntidade.jurisdicao_imediata || '',
+      jurisdicao: jurisdicaoEnum,
+      bispo: '',
       bispos_auxiliares: [],
-      loc_sede: supabaseEntidade.diocese.loc_sede || ''
-    } : undefined
+      loc_sede: ''
+    }
   };
 }
 
