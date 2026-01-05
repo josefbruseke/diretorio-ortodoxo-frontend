@@ -24,24 +24,69 @@
     // Importa Leaflet dinamicamente para evitar problemas com SSR
     const L = await import('leaflet');
     
-    // Cria o mapa centrado no Brasil
-    map = L.default.map(mapContainer).setView([-15.7942, -47.8822], 5);
+    // Cria o mapa centrado no Brasil com configurações de zoom
+    map = L.default.map(mapContainer, {
+      center: [-15.7942, -47.8822],
+      zoom: 5,
+      minZoom: 3,
+      maxZoom: 18,
+      zoomControl: true,
+      scrollWheelZoom: true,
+      doubleClickZoom: true,
+      boxZoom: true,
+      keyboard: true,
+      dragging: true,
+      zoomAnimation: true,
+      zoomAnimationThreshold: 4,
+      fadeAnimation: true,
+      markerZoomAnimation: true
+    });
     
     // Adiciona tiles do OpenStreetMap
     L.default.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19,
+      minZoom: 3
     }).addTo(map);
     
     // Cria grupo de clusters para marcadores
     await import('leaflet.markercluster');
-    markerClusterGroup = L.default.markerClusterGroup();
+    markerClusterGroup = L.default.markerClusterGroup({
+      disableClusteringAtZoom: 15,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true,
+      maxClusterRadius: 50
+    });
     map.addLayer(markerClusterGroup);
     
     // Adiciona marcadores iniciais
     await updateMarkers(L);
+    
+    // Adiciona listener para recalcular tamanho após zoom
+    map.on('zoomend', () => {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 50);
+    });
+    
+    // Adiciona listener para recalcular tamanho após movimentação
+    map.on('moveend', () => {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 50);
+    });
+    
+    // Adiciona listener específico para zoom start
+    map.on('zoomstart', () => {
+      map.invalidateSize();
+    });
+    
+    // Força recalculo inicial após um pequeno delay
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 250);
   });
-  let x = 3
-  x++
   // Reativo: atualiza marcadores quando entidades mudam
   $: if (map && markerClusterGroup && entidades) {
     import('leaflet').then(L => updateMarkers(L));
@@ -104,17 +149,20 @@
       opacity: 0.6
     }).addTo(map);
 
-    // Calcula o zoom apropriado baseado no raio
-    const zoomLevel = getZoomLevelForRadius(radiusKm);
+    // Usa fitBounds para ajustar o zoom automaticamente para mostrar todo o círculo
+    // Adiciona um padding menor para o círculo ficar mais próximo (mais zoom)
+    const bounds = radiusCircle.getBounds();
+    map.fitBounds(bounds, {
+      padding: [20, 20], // Padding reduzido em pixels (de 50 para 20)
+      maxZoom: 16, // Permite um pouco mais de zoom próximo (de 15 para 16)
+      animate: true,
+      duration: 0.5
+    });
     
-    // Obtém o zoom atual
-    const currentZoom = map.getZoom();
-    
-    // Se o zoom atual for menor que o necessário, ajusta o zoom; caso contrário, apenas centraliza
-    const finalZoom = currentZoom < zoomLevel ? zoomLevel : currentZoom;
-    
-    // Ajusta a visualização para mostrar a área do usuário
-    map.setView(userLocation, finalZoom);
+    // Força recalculo do tamanho do mapa após a mudança de visualização
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
   }
 
   function clearUserLocationAndZoom(L: any, setViewToDefault = true) {
@@ -133,18 +181,12 @@
     if (setViewToDefault) {
       // Volta para a visualização padrão do Brasil
       map.setView([-15.7942, -47.8822], 5);
+      
+      // Força recalculo do tamanho do mapa após voltar à visualização padrão
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 100);
     }
-  }
-
-  function getZoomLevelForRadius(radiusKm: number): number {
-    // Calcula o nível de zoom apropriado baseado no raio
-    // Estes valores foram ajustados empiricamente para uma boa visualização
-    if (radiusKm <= 10) return 12;
-    if (radiusKm <= 25) return 10;
-    if (radiusKm <= 50) return 9;
-    if (radiusKm <= 100) return 8;
-    if (radiusKm <= 200) return 7;
-    return 6;
   }
 
   async function addMarkersToMap(L: any, entidades: EntidadeEclesiastica[]) {
@@ -304,11 +346,26 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     margin-bottom: 2rem;
     position: relative;
+    min-height: 400px;
   }
   
   .map {
     height: 100%;
     width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Garante que os tiles do Leaflet sejam renderizados corretamente */
+  :global(.leaflet-container) {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    outline: none;
+  }
+  
+  :global(.leaflet-tile-container) {
+    position: absolute;
   }
 
   .loading-overlay {

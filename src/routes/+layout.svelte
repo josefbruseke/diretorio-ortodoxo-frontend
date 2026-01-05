@@ -83,6 +83,11 @@
         O Diretório Ortodoxo Brasil é uma iniciativa para mapear e conectar 
         todas as paróquias, catedrais, capelas e monastérios ortodoxos no Brasil.
       </p>
+      <p class="footer-text">
+        <a href="/sobre" style="color: var(--cor-ouro-bizantino); text-decoration: none;">
+          Saiba mais sobre o projeto →
+        </a>
+      </p>
     </div>
     
     <div class="footer-section">

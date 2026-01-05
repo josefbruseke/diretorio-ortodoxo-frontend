@@ -390,7 +390,7 @@
       </div>
       <nav class="header-nav">
         <a href="https://ecclesia.org.br" target="_blank" rel="noopener noreferrer" class="nav-link">ECCLESIA.ORG</a>
-        <a href="#sobre" class="nav-link">SOBRE</a>
+        <a href="/sobre" class="nav-link">SOBRE</a>
         <a href="#footer" class="nav-link">CONTATO</a>
       </nav>
     </div>
@@ -872,32 +872,6 @@
               {/if}
             {/each}
           </div>
-        </div>
-      </section>
-
-      <!-- Seção Sobre -->
-      <section id="sobre" class="sobre-section">
-        <h2>Sobre o Diretório</h2>
-        <div class="sobre-content">
-          <h3>Diretório de Paróquias, Comunidades e Missões Ortodoxas no Brasil</h3>
-          <p>
-            Apresentamos abaixo uma lista com os principais dados e endereços das paróquias, comunidades missionárias e monásticas pertencentes às Igrejas Ortodoxas Canônicas com presença no Brasil.
-          </p>
-          <p>Estão incluídas:</p>
-          <ul>
-            <li>Igrejas Gregas e Ucranianas, sob jurisdição do Patriarcado Ecumênico de Constantinopla;</li>
-            <li>Igrejas Antioquenas, sob o Patriarcado de Antioquia;</li>
-            <li>Igrejas Russas, vinculadas ao Patriarcado de Moscou e de Toda a Rússia;</li>
-            <li>Igrejas Missionárias da Eparquia do Rio de Janeiro e Olinda-Recife, sob a proteção canônica da Igreja Ortodoxa Autocéfala da Polônia;</li>
-            <li>Missões sob o Patriarcado da Sérvia, ligadas à Diocese Ortodoxa Sérvia de Buenos Aires e América do Sul.</li>
-          </ul>
-          <h4>Encontrou alguma informação incorreta?</h4>
-          <p>
-            Se você identificar erros ou dados desatualizados, pedimos a gentileza de entrar em contato com a administração do site.  Clique no botão abaixo para nos enviar uma correção:
-          </p>
-          <a href="mailto:info@ecclesia.org.br?subject=Correção - Diretório Ortodoxo" class="sobre-btn-link">
-            <button class="sobre-btn">Enviar correção</button>
-          </a>
         </div>
       </section>
     </div>
@@ -1559,96 +1533,6 @@
     font-size: 1.1rem;
   }
 
-  /* Sobre Section Styles */
-  .sobre-section {
-    margin-bottom: 3rem;
-    background: #FAFAFA;
-    padding: 2rem;
-    border-radius: 8px;
-    border: 2px solid var(--cor-cinza-neve);
-    box-shadow: 0 4px 8px rgba(207, 74, 70, 0.1);
-  }
-
-  .sobre-section h2 {
-    color: var(--cor-azul-constantinopolitano);
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    font-weight: 600;
-    border-bottom: 3px solid var(--cor-azul-constantinopolitano);
-    padding-bottom: 0.5rem;
-  }
-
-  .sobre-content h3 {
-    color: var(--cor-azul-constantinopolitano);
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    font-weight: 700;
-    border-bottom: 2px solid var(--cor-ouro-bizantino);
-    padding-bottom: 0.5rem;
-  }
-
-  .sobre-content h4 {
-    color: var(--cor-azul-constantinopolitano);
-    font-size: 1.1rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-    border-bottom: 2px solid var(--cor-ouro-bizantino);
-    padding-bottom: 0.3rem;
-  }
-
-  .sobre-content ul {
-    margin: 1.5rem 0 2rem 2rem;
-    padding: 0;
-    color: #2c1810;
-  }
-
-  .sobre-content li {
-    margin-bottom: 0.7rem;
-    font-size: 1rem;
-  }
-
-  .sobre-content p {
-    margin-bottom: 1.2rem;
-    font-size: 1.05rem;
-    line-height: 1.6;
-  }
-
-  .sobre-btn-link {
-    text-decoration: none;
-    display: inline-block;
-  }
-
-  .sobre-btn {
-    background: linear-gradient(135deg, var(--cor-azul-constantinopolitano), var(--cor-azul-constantinopolitano));
-    color: #fff;
-    border: none;
-    padding: 0.85rem 1.7rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 1.2rem;
-    box-shadow: 0 2px 4px rgba(207, 74, 70, 0.2);
-    transition: background 0.2s, transform 0.2s;
-  }
-
-  .sobre-btn:hover {
-    background: var(--cor-azul-marinho-escuro);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(207, 74, 70, 0.3);
-  }
-
-  .sobre-btn:active {
-    transform: translateY(0);
-  }
-
-  .sobre-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-  }
-
   .pagination {
     padding: 1rem;
     text-align: center;
@@ -1915,37 +1799,6 @@
 
     .type-count {
       font-size: 1rem;
-    }
-
-    /* Responsive sobre section */
-    .sobre-section {
-      padding: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .sobre-section h2 {
-      font-size: 1.5rem;
-      padding-bottom: 0.3rem;
-    }
-
-    .sobre-content h3 {
-      font-size: 1.2rem;
-      padding-bottom: 0.3rem;
-    }
-
-    .sobre-content h4 {
-      font-size: 1rem;
-      padding-bottom: 0.2rem;
-    }
-
-    .sobre-content ul {
-      margin-left: 1rem;
-    }
-
-    .sobre-btn {
-      width: 100%;
-      font-size: 0.95rem;
-      padding: 0.7rem 1rem;
     }
 
     /* Responsive near me controls */
