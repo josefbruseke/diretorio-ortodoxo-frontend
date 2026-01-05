@@ -13,7 +13,7 @@ export const tipoEntidadeLabels: Record<string, string> = {
   'Paróquia': 'Paróquia',
   'Capela': 'Capela',
   'Missão': 'Missão',
-  'Mosteiro': 'Mosteiro'
+  'Monastério': 'Monastério'
 };
 
 export const tipoEntidadeIcons: Record<string, string> = {
@@ -21,7 +21,7 @@ export const tipoEntidadeIcons: Record<string, string> = {
   'Paróquia': '/icon-paroquia.png',
   'Capela': '/icon-capela.png',
   'Missão': '/icon-missao.png',
-  'Mosteiro': '/icon-monasterio.png'
+  'Monastério': '/icon-monasterio.png'
 };
 
 export const tipoEntidadeSvgIcons: Record<string, string> = {
@@ -29,7 +29,7 @@ export const tipoEntidadeSvgIcons: Record<string, string> = {
   'Paróquia': '/icon-paroquia.png',
   'Capela': '/icon-capela.png',
   'Missão': '/icon-missao.png',
-  'Mosteiro': '/icon-monasterio.png'
+  'Monastério': '/icon-monasterio.png'
 };
 
 export function getJurisdicaoLabel(jurisdicao: Jurisdicao): string {

@@ -381,7 +381,7 @@
 
 <svelte:head>
   <title>Diretório Ortodoxo - Brasil</title>
-  <meta name="description" content="Diretório completo de igrejas, catedrais, mosteiros e missões ortodoxas no Brasil" />
+  <meta name="description" content="Diretório completo de igrejas, catedrais, monastérios e missões ortodoxas no Brasil" />
 </svelte:head>
 
 <div class="container">

@@ -1,6 +1,6 @@
 # Diretório Ortodoxo do Brasil
 
-Um diretório completo e interativo de igrejas, catedrais, mosteiros e missões ortodoxas no Brasil. Construído com SvelteKit, Supabase e Leaflet.
+Um diretório completo e interativo de igrejas, catedrais, monastérios e missões ortodoxas no Brasil. Construído com SvelteKit, Supabase e Leaflet.
 
 ## Sobre o Projeto
 

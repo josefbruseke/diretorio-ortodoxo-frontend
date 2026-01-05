@@ -10,7 +10,7 @@ import type {
 export interface SupabaseEntidade {
   id: number;
   nome_comunidade: string;
-  tipo: 'Catedral' | 'Paróquia' | 'Mosteiro' | 'Missão' | 'Capela';
+  tipo: 'Catedral' | 'Paróquia' | 'Monastério' | 'Missão' | 'Capela';
   santo_padroeiro?: string;
   jurisdicao_imediata?: string;
   patriarcado?: string;
@@ -281,7 +281,7 @@ class SupabaseService {
   }
 
   async getTipos(): Promise<string[]> {
-    return ['Catedral', 'Paróquia', 'Mosteiro', 'Missão', 'Capela'];
+    return ['Catedral', 'Paróquia', 'Monastério', 'Missão', 'Capela'];
   }
 
   async getJurisdicoes(): Promise<string[]> {

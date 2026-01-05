@@ -10,7 +10,7 @@ export type TipoEntidade =
   | 'Paróquia' 
   | 'Capela'
   | 'Missão'
-  | 'Mosteiro';
+  | 'Monastério';
 
 export interface Diocese {
   id: number;
