@@ -33,10 +33,60 @@
   let showEditCleroModal = false;
   let selectedClerigo: ApiClero | null = null;
 
+  // Search and filter state
+  let searchQuery = '';
+  let selectedTipo = '';
+  let selectedEstado = '';
+  let selectedStatus = '';
+  let selectedJurisdicao = '';
+
+  // Computed filtered data
+  $: filteredEntidades = entidades.filter(e => {
+    const matchesSearch = !searchQuery || 
+      e.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (e.cidade && e.cidade.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (e.endereco && e.endereco.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesTipo = !selectedTipo || e.tipo === selectedTipo;
+    const matchesEstado = !selectedEstado || e.estado === selectedEstado;
+    const matchesStatus = !selectedStatus || e.status === selectedStatus;
+    return matchesSearch && matchesTipo && matchesEstado && matchesStatus;
+  });
+
+  $: filteredDioceses = dioceses.filter(d => {
+    const matchesSearch = !searchQuery || 
+      d.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (d.loc_sede && d.loc_sede.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesJurisdicao = !selectedJurisdicao || d.jurisdicao === selectedJurisdicao;
+    return matchesSearch && matchesJurisdicao;
+  });
+
+  $: filteredClero = clero.filter(c => {
+    const matchesSearch = !searchQuery || 
+      c.nome_completo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (c.email && c.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (c.titulo && c.titulo.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesSearch;
+  });
+
+  // Get unique values for filters
+  $: tipoOptions = [...new Set(entidades.map(e => e.tipo))].sort();
+  $: estadoOptions = [...new Set(entidades.map(e => e.estado))].filter(Boolean).sort();
+  $: statusOptions = [...new Set(entidades.map(e => e.status))].filter(Boolean).sort();
+  $: jurisdicaoOptions = [...new Set(dioceses.map(d => d.jurisdicao))].filter(Boolean).sort();
+
+  function resetFilters() {
+    searchQuery = '';
+    selectedTipo = '';
+    selectedEstado = '';
+    selectedStatus = '';
+    selectedJurisdicao = '';
+  }
+
   async function loadData(table: 'entidades' | 'dioceses' | 'clero') {
     loading = true;
     error = null;
     activeTable = table;
+    resetFilters(); // Reset filters when switching tables
 
     try {
       if (table === 'entidades') {
@@ -620,6 +670,67 @@
   .link-btn:hover {
     color: #b83c38;
   }
+
+  .search-filters {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background-color: #F9F5F2;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+
+  .filter-group {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .filter-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+  }
+
+  .filter-group input,
+  .filter-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    background-color: white;
+  }
+
+  .filter-group input:focus,
+  .filter-group select:focus {
+    outline: none;
+    border-color: #CF4A46;
+  }
+
+  .reset-filters-btn {
+    padding: 0.5rem 1rem;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    align-self: flex-end;
+  }
+
+  .reset-filters-btn:hover {
+    background-color: #5a6268;
+  }
+
+  .results-count {
+    margin: 1rem 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
 </style>
 
 <div class="container">
@@ -648,13 +759,57 @@
   {:else}
     {#if activeTable === 'entidades'}
       <!-- Entidades Table -->
+      <!-- Search and Filters -->
+      <div class="search-filters">
+        <div class="filter-group">
+          <label for="search">Pesquisar</label>
+          <input 
+            type="text" 
+            id="search" 
+            placeholder="Buscar por nome, cidade ou endereço..." 
+            bind:value={searchQuery}
+          />
+        </div>
+        <div class="filter-group">
+          <label for="tipo-filter">Tipo</label>
+          <select id="tipo-filter" bind:value={selectedTipo}>
+            <option value="">Todos os Tipos</option>
+            {#each tipoOptions as tipo}
+              <option value={tipo}>{tipo}</option>
+            {/each}
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="estado-filter">Estado</label>
+          <select id="estado-filter" bind:value={selectedEstado}>
+            <option value="">Todos os Estados</option>
+            {#each estadoOptions as estado}
+              <option value={estado}>{estado}</option>
+            {/each}
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="status-filter">Status</label>
+          <select id="status-filter" bind:value={selectedStatus}>
+            <option value="">Todos os Status</option>
+            {#each statusOptions as status}
+              <option value={status}>{status}</option>
+            {/each}
+          </select>
+        </div>
+        <button class="reset-filters-btn" on:click={resetFilters}>Limpar</button>
+      </div>
+      
+      <div class="results-count">
+        Mostrando {filteredEntidades.length} de {entidades.length} entidades
+      </div>
+
       <div class="table-header">
         <button class="create-btn" on:click={openCreateEntidadeModal}>Create New Entidade</button>
       </div>
       <table>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nome</th>
             <th>Tipo</th>
             <th>Cidade</th>
@@ -666,9 +821,8 @@
           </tr>
         </thead>
         <tbody>
-          {#each entidades as entidade}
+          {#each filteredEntidades as entidade}
             <tr>
-              <td>{entidade.id}</td>
               <td>{entidade.nome}</td>
               <td>{entidade.tipo}</td>
               <td>{entidade.cidade}</td>
@@ -687,13 +841,39 @@
       </table>
     {:else if activeTable === 'dioceses'}
       <!-- Dioceses Table -->
+      <!-- Search and Filters -->
+      <div class="search-filters">
+        <div class="filter-group">
+          <label for="search">Pesquisar</label>
+          <input 
+            type="text" 
+            id="search" 
+            placeholder="Buscar por nome ou localização..." 
+            bind:value={searchQuery}
+          />
+        </div>
+        <div class="filter-group">
+          <label for="jurisdicao-filter">Jurisdição</label>
+          <select id="jurisdicao-filter" bind:value={selectedJurisdicao}>
+            <option value="">Todas as Jurisdições</option>
+            {#each jurisdicaoOptions as jurisdicao}
+              <option value={jurisdicao}>{jurisdicao}</option>
+            {/each}
+          </select>
+        </div>
+        <button class="reset-filters-btn" on:click={resetFilters}>Limpar</button>
+      </div>
+      
+      <div class="results-count">
+        Mostrando {filteredDioceses.length} de {dioceses.length} dioceses
+      </div>
+
       <div class="table-header">
         <button class="create-btn" on:click={openCreateDioceseModal}>Create New Diocese</button>
       </div>
       <table>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nome</th>
             <th>Jurisdição</th>
             <th>Sede</th>
@@ -701,9 +881,8 @@
           </tr>
         </thead>
         <tbody>
-          {#each dioceses as diocese}
+          {#each filteredDioceses as diocese}
             <tr>
-              <td>{diocese.id}</td>
               <td>{diocese.nome}</td>
               <td>{diocese.jurisdicao}</td>
               <td>{diocese.loc_sede}</td>
@@ -714,13 +893,30 @@
       </table>
     {:else if activeTable === 'clero'}
       <!-- Clero Table -->
+      <!-- Search and Filters -->
+      <div class="search-filters">
+        <div class="filter-group">
+          <label for="search">Pesquisar</label>
+          <input 
+            type="text" 
+            id="search" 
+            placeholder="Buscar por nome, título ou email..." 
+            bind:value={searchQuery}
+          />
+        </div>
+        <button class="reset-filters-btn" on:click={resetFilters}>Limpar</button>
+      </div>
+      
+      <div class="results-count">
+        Mostrando {filteredClero.length} de {clero.length} membros do clero
+      </div>
+
       <div class="table-header">
         <button class="create-btn" on:click={openCreateCleroModal}>Create New Clerigo</button>
       </div>
       <table>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nome Completo</th>
             <th>Título</th>
             <th>Email</th>
@@ -728,9 +924,8 @@
           </tr>
         </thead>
         <tbody>
-          {#each clero as clerigo}
+          {#each filteredClero as clerigo}
             <tr>
-              <td>{clerigo.id}</td>
               <td>{clerigo.nome_completo}</td>
               <td>{clerigo.titulo}</td>
               <td>{clerigo.email}</td>
