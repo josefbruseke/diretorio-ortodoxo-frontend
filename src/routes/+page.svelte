@@ -8,8 +8,8 @@
   import { getTipoEntidadeLabel, getJurisdicaoLabel } from '$lib/utils.js';
 
   // Dados das entidades eclesiásticas
-  let entidades: (EntidadeEclesiastica & { diocese: Diocese })[] = [];
-  let filteredEntidades: (EntidadeEclesiastica & { diocese: Diocese })[] = [];
+  let entidades: (EntidadeEclesiastica & { diocese?: Diocese })[] = [];
+  let filteredEntidades: (EntidadeEclesiastica & { diocese?: Diocese })[] = [];
   let selectedTipos: Set<string> = new Set();
   let selectedJurisdicoes: Set<string> = new Set();
   let selectedEstados: Set<string> = new Set();
@@ -113,13 +113,15 @@
         // When using Supabase, jurisdicaoApi is already in enum format (e.g., 'PatriarcadoEcumenico')
         // When using API, we need to map from display name to enum format
         const jurisdicaoLocal = isUsingSupabase ? jurisdicaoApi : mapJurisdicaoApiToLocal(jurisdicaoApi);
-        novasJurisdicoes[jurisdicaoLocal] = entidades.filter(e => e.diocese.jurisdicao === jurisdicaoLocal).length;
+        novasJurisdicoes[jurisdicaoLocal] = entidades.filter(e => e.diocese?.jurisdicao === jurisdicaoLocal).length;
       });
     } else {
       // Fallback: usar apenas jurisdições que existem nas entidades
-      const jurisdicoesUnicas = [...new Set(entidades.map(e => e.diocese.jurisdicao))].filter(j => j); // Filter out empty values
+      const jurisdicoesUnicas = [...new Set(entidades.map(e => e.diocese?.jurisdicao).filter(j => j))]; // Filter out empty values
       jurisdicoesUnicas.forEach(jurisdicao => {
-        novasJurisdicoes[jurisdicao] = entidades.filter(e => e.diocese.jurisdicao === jurisdicao).length;
+        if (jurisdicao) {
+          novasJurisdicoes[jurisdicao] = entidades.filter(e => e.diocese?.jurisdicao === jurisdicao).length;
+        }
       });
     }
     jurisdicoes = novasJurisdicoes;
@@ -175,7 +177,7 @@
       // Filter locally since API might not support multiple values
       let results = entidades.filter(entidade => {
         const tipoMatch = selectedTipos.size === 0 || selectedTipos.has(entidade.tipo);
-        const jurisdicaoMatch = selectedJurisdicoes.size === 0 || selectedJurisdicoes.has(entidade.diocese.jurisdicao);
+        const jurisdicaoMatch = selectedJurisdicoes.size === 0 || (entidade.diocese?.jurisdicao && selectedJurisdicoes.has(entidade.diocese.jurisdicao));
         const estadoMatch = selectedEstados.size === 0 || selectedEstados.has(entidade.estado);
         
         return tipoMatch && jurisdicaoMatch && estadoMatch;
@@ -759,7 +761,7 @@
                     <td>{getTipoEntidadeLabel(entidade.tipo)}</td>
                     <td>{entidade.cidade}</td>
                     <td>{entidade.estado}</td>
-                    <td>{getJurisdicaoLabel(entidade.diocese.jurisdicao)}</td>
+                    <td>{entidade.diocese?.jurisdicao ? getJurisdicaoLabel(entidade.diocese.jurisdicao) : '-'}</td>
                     {#if showNearMe && userLocation && entidade.latitude && entidade.longitude}
                       <td class="distance-cell">
                         {calculateDistance(userLocation[0], userLocation[1], entidade.latitude, entidade.longitude).toFixed(1)} km
@@ -792,7 +794,7 @@
                     {entidade.cidade}, {entidade.estado}
                   </div>
                   <div class="mobile-item-jurisdiction">
-                    {getJurisdicaoLabel(entidade.diocese.jurisdicao)}
+                    {entidade.diocese?.jurisdicao ? getJurisdicaoLabel(entidade.diocese.jurisdicao) : '-'}
                   </div>
                   {#if showNearMe && userLocation && entidade.latitude && entidade.longitude}
                     <div class="mobile-item-distance">

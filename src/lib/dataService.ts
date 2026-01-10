@@ -15,7 +15,7 @@ export class DataService {
   private apiAvailable = false; // Track if API is available
   
   // Obter todas as entidades com filtros
-  async getEntidades(filtros: DataServiceFiltros = {}, fetchFn?: typeof fetch): Promise<(EntidadeEclesiastica & { diocese: Diocese })[]> {
+  async getEntidades(filtros: DataServiceFiltros = {}, fetchFn?: typeof fetch): Promise<(EntidadeEclesiastica & { diocese?: Diocese })[]> {
     if (this.useSupabase) {
       try {
         // Use Supabase service
@@ -26,8 +26,14 @@ export class DataService {
           if (filtros.estado && entidade.uf !== filtros.estado) return false;
           if (filtros.cidade && entidade.cidade !== filtros.cidade) return false;
           if (filtros.tipo && entidade.tipo !== filtros.tipo) return false;
-          // Note: dioceseId filter won't work with new schema since id_diocese doesn't exist
-          if (filtros.jurisdicao && entidade.patriarcado !== filtros.jurisdicao) return false;
+          // Filter by diocese if provided
+          if (filtros.dioceseId && entidade.id_diocese !== filtros.dioceseId) return false;
+          // Filter by jurisdicao - check both patriarcado field and diocese jurisdicao
+          if (filtros.jurisdicao) {
+            const matchPatriarcado = entidade.patriarcado === filtros.jurisdicao;
+            const matchDiocese = entidade.diocese?.jurisdicao === filtros.jurisdicao;
+            if (!matchPatriarcado && !matchDiocese) return false;
+          }
           return true;
         });
         
@@ -35,7 +41,7 @@ export class DataService {
           const mapped = mapSupabaseEntidadeToLocal(entity);
           return {
             ...mapped,
-            diocese: mapped.diocese!
+            diocese: mapped.diocese
           };
         });
       } catch (error) {
@@ -63,13 +69,13 @@ export class DataService {
       const mapped = mapApiEntidadeToLocal(entity);
       return {
         ...mapped,
-        diocese: mapped.diocese!
+        diocese: mapped.diocese
       };
     });
   }
 
   // Obter entidade por ID
-  async getEntidade(id: number, fetchFn?: typeof fetch): Promise<(EntidadeEclesiastica & { diocese: Diocese }) | undefined> {
+  async getEntidade(id: number, fetchFn?: typeof fetch): Promise<(EntidadeEclesiastica & { diocese?: Diocese }) | undefined> {
     if (this.useSupabase) {
       try {
         const supabaseEntidade = await supabaseService.getEntidadeById(id);
@@ -77,7 +83,7 @@ export class DataService {
           const mapped = mapSupabaseEntidadeToLocal(supabaseEntidade);
           return {
             ...mapped,
-            diocese: mapped.diocese!
+            diocese: mapped.diocese
           };
         }
         return undefined;
@@ -93,7 +99,7 @@ export class DataService {
       const mapped = mapApiEntidadeToLocal(apiEntidade);
       return {
         ...mapped,
-        diocese: mapped.diocese!
+        diocese: mapped.diocese
       };
     } catch (error) {
       console.error('Erro ao buscar entidade da API:', error);

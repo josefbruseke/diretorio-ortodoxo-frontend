@@ -92,7 +92,7 @@
       if (table === 'entidades') {
         const data = await dataService.getEntidades();
         // Convert to ApiEntidade format for compatibility with existing modals
-        entidades = data.map((e: EntidadeEclesiastica & { diocese: Diocese }): ApiEntidade => ({
+        entidades = data.map((e: EntidadeEclesiastica & { diocese?: Diocese }): ApiEntidade => ({
           id: e.id,
           nome: e.nome,
           tipo: e.tipo,
