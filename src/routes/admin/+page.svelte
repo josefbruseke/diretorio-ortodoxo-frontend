@@ -108,6 +108,7 @@
           latitude: e.latitude,
           longitude: e.longitude,
           status: e.status,
+          id_diocese: e.id_diocese,
           diocese: e.diocese ? {
             id: e.diocese.id,
             nome: e.diocese.nome,
@@ -170,7 +171,8 @@
         latitude: updatedEntidade.latitude,
         longitude: updatedEntidade.longitude,
         url_foto: updatedEntidade.url_foto,
-        status: updatedEntidade.status
+        status: updatedEntidade.status,
+        id_diocese: updatedEntidade.id_diocese
       };
       
       let savedEntidade: ApiEntidade | undefined;
@@ -198,14 +200,14 @@
               latitude: savedEntidade.latitude,
               longitude: savedEntidade.longitude,
               url_foto: savedEntidade.url_foto,
-              status: savedEntidade.status
+              status: savedEntidade.status,
+              id_diocese: savedEntidade.id_diocese
             };
             entidades = entidades; // Trigger reactivity
           }
         }
       } else {
         // Create new
-        // No need to include id_diocese as it doesn't exist in new schema
         savedEntidade = await dataService.createEntidade(dataToSave);
         
         if (savedEntidade) {
@@ -812,6 +814,7 @@
           <tr>
             <th>Nome</th>
             <th>Tipo</th>
+            <th>Diocese</th>
             <th>Cidade</th>
             <th>Estado</th>
             <th>Status</th>
@@ -825,6 +828,7 @@
             <tr>
               <td>{entidade.nome}</td>
               <td>{entidade.tipo}</td>
+              <td>{entidade.diocese?.nome || '-'}</td>
               <td>{entidade.cidade}</td>
               <td>{entidade.estado}</td>
               <td>

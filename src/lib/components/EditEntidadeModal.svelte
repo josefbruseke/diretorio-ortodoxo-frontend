@@ -15,6 +15,7 @@
   let editedEntidade: ApiEntidade;
   let tipos: string[] = [];
   let estados: string[] = [];
+  let dioceses: ApiDiocese[] = [];
   let originalAddress: string = '';
   let isGeocodingLoading = false;
   let geocodingError: string | null = null;
@@ -73,6 +74,15 @@
     try {
       tipos = await dataService.getTipos();
       estados = await dataService.getEstados();
+      
+      // Load dioceses
+      const diocesesData = await dataService.getDioceses();
+      dioceses = diocesesData.map(d => ({
+        id: d.id,
+        nome: d.nome,
+        jurisdicao: d.jurisdicao,
+        loc_sede: d.loc_sede
+      }));
       
       if (entidade) {
         originalAddress = `${entidade.cep}, ${entidade.cidade}`;
@@ -528,6 +538,18 @@
           {#if validationErrors.tipo}
             <span class="field-error">{validationErrors.tipo}</span>
           {/if}
+        </div>
+        <div class="form-group">
+          <label for="diocese">Diocese:</label>
+          <select 
+            id="diocese" 
+            bind:value={editedEntidade.id_diocese}
+          >
+            <option value={null}>Selecione uma diocese</option>
+            {#each dioceses as diocese}
+              <option value={diocese.id}>{diocese.nome} - {diocese.loc_sede || ''}</option>
+            {/each}
+          </select>
         </div>
         <div class="form-group">
           <label for="status">Status:</label>

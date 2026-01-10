@@ -14,6 +14,7 @@ export interface SupabaseEntidade {
   santo_padroeiro?: string;
   jurisdicao_imediata?: string;
   patriarcado?: string;
+  id_diocese?: number;
   id_reitor?: number;
   reitor?: string;
   telefone?: string;
@@ -93,6 +94,12 @@ class SupabaseService {
       .from('entidade_eclesiastica')
       .select(`
         *,
+        diocese:id_diocese (
+          id,
+          nome,
+          jurisdicao,
+          loc_sede
+        ),
         clero:id_reitor (
           id,
           nome_completo,
@@ -121,6 +128,12 @@ class SupabaseService {
       .from('entidade_eclesiastica')
       .select(`
         *,
+        diocese:id_diocese (
+          id,
+          nome,
+          jurisdicao,
+          loc_sede
+        ),
         clero:id_reitor (
           id,
           nome_completo,
@@ -146,12 +159,10 @@ class SupabaseService {
   }
 
   async getEntidadesByDiocese(dioceseId: number): Promise<SupabaseEntidade[]> {
-    // Note: Since the new schema doesn't have id_diocese,
-    // this method will need to be refactored or deprecated
     const { data, error } = await supabase
       .from('entidade_eclesiastica')
       .select('*')
-      .eq('jurisdicao_imediata', dioceseId); // This won't work properly - needs redesign
+      .eq('id_diocese', dioceseId);
 
     if (error) {
       console.error('Error fetching entidades by diocese:', error);
@@ -586,10 +597,20 @@ export function mapSupabaseEntidadeToLocal(supabaseEntidade: SupabaseEntidadeWit
   };
   
   const jurisdicaoEnum = mapPatriarcadoToJurisdicao(supabaseEntidade.patriarcado);
+  
+  // Get the actual diocese if available
+  const diocese: Diocese | undefined = supabaseEntidade.diocese ? {
+    id: supabaseEntidade.diocese.id,
+    nome: supabaseEntidade.diocese.nome,
+    jurisdicao: supabaseEntidade.diocese.jurisdicao as Jurisdicao,
+    bispo: '',
+    bispos_auxiliares: [],
+    loc_sede: supabaseEntidade.diocese.loc_sede || ''
+  } : undefined;
     
   return {
     id: supabaseEntidade.id,
-    id_diocese: undefined, // Not in new schema
+    id_diocese: supabaseEntidade.id_diocese,
     nome: supabaseEntidade.nome_comunidade,
     tipo: supabaseEntidade.tipo as TipoEntidade,
     santo_padroeiro: supabaseEntidade.santo_padroeiro,
@@ -614,15 +635,7 @@ export function mapSupabaseEntidadeToLocal(supabaseEntidade: SupabaseEntidadeWit
     longitude: supabaseEntidade.longitude,
     url_foto: mainPhoto,
     fotos: fotos,
-    // Create a fake diocese object for compatibility
-    diocese: {
-      id: 0,
-      nome: supabaseEntidade.jurisdicao_imediata || '',
-      jurisdicao: jurisdicaoEnum,
-      bispo: '',
-      bispos_auxiliares: [],
-      loc_sede: ''
-    }
+    diocese: diocese
   };
 }
 

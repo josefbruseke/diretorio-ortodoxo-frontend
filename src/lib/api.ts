@@ -39,6 +39,7 @@ export interface ApiEntidade {
   longitude?: number;
   url_foto?: string | null;
   status?: string;
+  id_diocese?: number;
   diocese?: {
     id: number;
     nome: string;

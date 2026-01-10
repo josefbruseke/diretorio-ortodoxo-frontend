@@ -267,6 +267,7 @@ export class DataService {
           latitude: data.latitude,
           longitude: data.longitude,
           status: data.status,
+          id_diocese: data.id_diocese,
           ultima_atualizacao: new Date().toISOString()
         };
         
@@ -342,6 +343,7 @@ export class DataService {
           santo_padroeiro: data.santo_padroeiro,
           jurisdicao_imediata: data.jurisdicao_imediata,
           patriarcado: data.patriarcado,
+          id_diocese: data.id_diocese,
           id_reitor: data.id_reitor,
           reitor: data.reitor,
           endereco: data.endereco,
