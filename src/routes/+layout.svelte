@@ -31,20 +31,34 @@
   .jurisdiction-seals {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .seal-item {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    gap: 0.5rem;
+    max-width: 120px;
   }
 
   .seal {
     height: 60px;
     width: auto;
-    filter: brightness(0) invert(1);
-    opacity: 0.8;
+    opacity: 0.9;
     transition: opacity 0.3s ease;
   }
 
   .seal:hover {
     opacity: 1;
+  }
+
+  .seal-label {
+    font-size: 0.75rem;
+    text-align: center;
+    line-height: 1.2;
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .footer-text {
@@ -93,12 +107,26 @@
     <div class="footer-section">
       <h3>Jurisdições Canônicas</h3>
       <div class="jurisdiction-seals">
-        <img src="/selo-patriarcado-ecumenico.png" alt="Patriarcado Ecumênico" class="seal" title="Patriarcado Ecumênico" />
-        <img src="/selo-vicariato-patriarcal-rj.png" alt="Vicariato Patriarcal RJ" class="seal" title="Vicariato Patriarcal RJ" />
-        <img src="/selo-antioquia-sp.png" alt="Patriarcado de Antioquia" class="seal" title="Patriarcado de Antioquia" />
-        <img src="/selo-vicariato-russo.png" alt="Patriarcado de Moscou" class="seal" title="Patriarcado de Moscou" />
-        <img src="/selo-vicariato-servio.png" alt="Patriarcado da Sérvia" class="seal" title="Patriarcado da Sérvia" />
-        <img src="/selo-eparquia-polonia.png" alt="Igreja da Polônia" class="seal" title="Igreja da Polônia" />
+        <div class="seal-item">
+          <img src="/1-Patriarcado-Ecumenico.png" alt="Patriarcado Ecumênico" class="seal" title="Patriarcado Ecumênico" />
+          <span class="seal-label">Patriarcado Ecumênico</span>
+        </div>
+        <div class="seal-item">
+          <img src="/2-Patriarcado-de-Antioquia.png" alt="Patriarcado de Antioquia" class="seal" title="Patriarcado de Antioquia" />
+          <span class="seal-label">Patriarcado de Antioquia</span>
+        </div>
+        <div class="seal-item">
+          <img src="/3-Patriarcado-de-Moscou.png" alt="Patriarcado de Moscou" class="seal" title="Patriarcado de Moscou" />
+          <span class="seal-label">Patriarcado de Moscou</span>
+        </div>
+        <div class="seal-item">
+          <img src="/4-Patriarcado-da-Servia.png" alt="Patriarcado da Sérvia" class="seal" title="Patriarcado da Sérvia" />
+          <span class="seal-label">Patriarcado da Sérvia</span>
+        </div>
+        <div class="seal-item">
+          <img src="/5-Igreja-da-Polonia.png" alt="Igreja da Polônia" class="seal" title="Igreja da Polônia" />
+          <span class="seal-label">Igreja da Polônia</span>
+        </div>
       </div>
     </div>
     
