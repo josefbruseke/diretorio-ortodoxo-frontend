@@ -105,8 +105,10 @@
     <div class="footer-section">
       <h3>Contato</h3>
       <p class="footer-text">
-        Para adicionar ou atualizar informações sobre sua paróquia,<br />
-        entre em contato através do site <a href="https://ecclesia.org.br" style="color: var(--cor-ouro-bizantino);">Ecclesia.org.br</a>
+        Para adicionar ou atualizar informações sobre sua paróquia:<br />
+        Telefone: <a href="tel:+554898456700" style="color: var(--cor-ouro-bizantino);">+55 (48) 98456-7000</a><br />
+        Email: <a href="mailto:ecclesia@ecclesia.org.br" style="color: var(--cor-ouro-bizantino);">ecclesia@ecclesia.org.br</a><br />
+        Site: <a href="https://ecclesia.org.br" style="color: var(--cor-ouro-bizantino);">Ecclesia.org.br</a>
       </p>
     </div>
   </div>
