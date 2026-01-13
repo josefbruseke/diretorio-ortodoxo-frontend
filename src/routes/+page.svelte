@@ -5,7 +5,7 @@
   import Map from '$lib/Map.svelte';
   import type { EntidadeEclesiastica, Diocese, TipoEntidade, Jurisdicao } from '$lib/types.js';
   import { dataService } from '$lib/dataService.js';
-  import { getTipoEntidadeLabel, getJurisdicaoLabel } from '$lib/utils.js';
+  import { getTipoEntidadeLabel, getJurisdicaoLabel, sortByPrecedence } from '$lib/utils.js';
 
   // Dados das entidades eclesiásticas
   let entidades: (EntidadeEclesiastica & { diocese?: Diocese })[] = [];
@@ -17,6 +17,10 @@
   let loading = false;
   let isUsingApi = false;
   let isUsingSupabase = false;
+  
+  // Busca textual
+  let searchQuery = '';
+  let searchDebounceTimer: number;
 
   // Dropdown states
   let tiposDropdownOpen = false;
@@ -61,6 +65,9 @@
       
       // Carregar entidades
       entidades = await dataService.getEntidades();
+      
+      // Aplicar ordenação por precedência
+      entidades = sortByPrecedence(entidades);
       filteredEntidades = entidades;
       
       // Calcular contadores para filtros
@@ -183,6 +190,16 @@
         return tipoMatch && jurisdicaoMatch && estadoMatch;
       });
       
+      // Aplicar busca textual se houver query (busca apenas no nome da entidade)
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase().trim();
+        results = results.filter(entidade => {
+          // Busca apenas no nome da entidade
+          const nomeMatch = entidade.nome?.toLowerCase().includes(query);
+          return nomeMatch;
+        });
+      }
+      
       // Aplicar filtro de proximidade se ativo
       if (showNearMe && userLocation) {
         results = results.filter(entidade => {
@@ -212,6 +229,9 @@
           
           return distanceA - distanceB;
         });
+      } else {
+        // Se não estiver usando "Próximo a Mim", ordena por precedência
+        results = sortByPrecedence(results);
       }
       
       filteredEntidades = results;
@@ -318,6 +338,7 @@
     userLocation = null;
     locationError = '';
     radiusKm = 50; // Reset to default
+    searchQuery = ''; // Clear search
     filterEntidades();
   }
 
@@ -326,7 +347,30 @@
     return selectedTipos.size > 0 || 
            selectedJurisdicoes.size > 0 || 
            selectedEstados.size > 0 || 
-           showNearMe;
+           showNearMe ||
+           searchQuery.trim() !== '';
+  }
+  
+  // Busca com debounce para melhor performance
+  function handleSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    searchQuery = input.value;
+    
+    // Clear previous timer
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer);
+    }
+    
+    // Set new timer (300ms delay)
+    searchDebounceTimer = setTimeout(() => {
+      filterEntidades();
+    }, 300) as unknown as number;
+  }
+  
+  // Limpar busca
+  function clearSearch() {
+    searchQuery = '';
+    filterEntidades();
   }
 
   // Toggle filter selection
@@ -409,6 +453,36 @@
     {/if}
     
     <div class="sidebar">
+      <!-- Busca Textual -->
+      <section class="filter-section search-section">
+        <h3>Buscar</h3>
+        <div class="search-container">
+          <input 
+            type="text" 
+            class="search-input"
+            placeholder="Nome da entidade..."
+            value={searchQuery}
+            oninput={handleSearchInput}
+            disabled={loading}
+          />
+          {#if searchQuery}
+            <button 
+              class="search-clear-btn"
+              onclick={clearSearch}
+              title="Limpar busca"
+              aria-label="Limpar busca"
+            >
+              ✕
+            </button>
+          {/if}
+        </div>
+        {#if searchQuery}
+          <div class="search-results-info">
+            {filteredEntidades.length} resultado{filteredEntidades.length !== 1 ? 's' : ''} encontrado{filteredEntidades.length !== 1 ? 's' : ''}
+          </div>
+        {/if}
+      </section>
+      
       <!-- Filtro por Tipo -->
       <section class="filter-section">
         <h3>Tipo</h3>
@@ -552,6 +626,36 @@
 
       <!-- Mobile Filters Section (visible only on mobile) -->
       <section class="mobile-filters">
+        <!-- Busca Textual Mobile -->
+        <div class="mobile-filter-item">
+          <div class="mobile-filter-label">🔍 Buscar:</div>
+          <div class="search-container">
+            <input 
+              type="text" 
+              class="search-input"
+              placeholder="Nome da entidade..."
+              value={searchQuery}
+              oninput={handleSearchInput}
+              disabled={loading}
+            />
+            {#if searchQuery}
+              <button 
+                class="search-clear-btn"
+                onclick={clearSearch}
+                title="Limpar busca"
+                aria-label="Limpar busca"
+              >
+                ✕
+              </button>
+            {/if}
+          </div>
+          {#if searchQuery}
+            <div class="search-results-info" style="margin-top: 0.5rem;">
+              {filteredEntidades.length} resultado{filteredEntidades.length !== 1 ? 's' : ''} encontrado{filteredEntidades.length !== 1 ? 's' : ''}
+            </div>
+          {/if}
+        </div>
+        
         <!-- Filtro por Tipo -->
         <div class="mobile-filter-item">
           <div class="mobile-filter-label">Tipo:</div>
@@ -1001,6 +1105,80 @@
     font-weight: 600;
     border-bottom: 2px solid var(--cor-azul-constantinopolitano);
     padding-bottom: 0.5rem;
+  }
+  
+  /* Search Styles */
+  .search-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--cor-azul-constantinopolitano);
+  }
+  
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    border: 2px solid var(--cor-cinza-neve);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    background-color: white;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--cor-azul-constantinopolitano);
+    box-shadow: 0 0 0 3px rgba(0, 87, 174, 0.1);
+  }
+  
+  .search-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #f5f5f5;
+  }
+  
+  .search-input::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+  
+  .search-clear-btn {
+    position: absolute;
+    right: 0.5rem;
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .search-clear-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #333;
+  }
+  
+  .search-results-info {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--cor-azul-constantinopolitano);
+    font-weight: 500;
+    text-align: center;
+    padding: 0.25rem;
+    background-color: rgba(0, 87, 174, 0.05);
+    border-radius: 4px;
   }
 
   /* Dropdown Styles */
