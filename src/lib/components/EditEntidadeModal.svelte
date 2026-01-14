@@ -16,6 +16,10 @@
   let tipos: string[] = [];
   let estados: string[] = [];
   let dioceses: ApiDiocese[] = [];
+  let cleroList: ApiClero[] = [];
+  let cleroSearchQuery: string = '';
+  let showCleroDropdown: boolean = false;
+  let selectedCleroName: string = '';
   let originalAddress: string = '';
   let isGeocodingLoading = false;
   let geocodingError: string | null = null;
@@ -70,6 +74,56 @@
   $: currentAddress = `${editedEntidade.cep}, ${editedEntidade.cidade}`;
   $: addressChanged = originalAddress && originalAddress !== currentAddress;
 
+  // Filter clero based on search query
+  $: filteredCleroList = cleroList.filter(clerigo => {
+    if (!cleroSearchQuery) return true;
+    const searchLower = cleroSearchQuery.toLowerCase();
+    const nomeMatch = clerigo.nome_completo.toLowerCase().includes(searchLower);
+    const tituloMatch = clerigo.titulo?.toLowerCase().includes(searchLower);
+    const emailMatch = clerigo.email?.toLowerCase().includes(searchLower);
+    return nomeMatch || tituloMatch || emailMatch;
+  });
+
+  // Update selected clero name when id_reitor changes
+  $: {
+    if (editedEntidade.id_reitor && cleroList.length > 0) {
+      const selectedClerigo = cleroList.find(c => c.id === editedEntidade.id_reitor);
+      if (selectedClerigo) {
+        selectedCleroName = `${selectedClerigo.titulo ? selectedClerigo.titulo + ' ' : ''}${selectedClerigo.nome_completo}`;
+        cleroSearchQuery = selectedCleroName;
+      }
+    } else if (!editedEntidade.id_reitor) {
+      selectedCleroName = '';
+      cleroSearchQuery = '';
+    }
+  }
+
+  function selectClerigo(clerigo: ApiClero) {
+    editedEntidade.id_reitor = clerigo.id;
+    selectedCleroName = `${clerigo.titulo ? clerigo.titulo + ' ' : ''}${clerigo.nome_completo}`;
+    cleroSearchQuery = selectedCleroName;
+    showCleroDropdown = false;
+  }
+
+  function clearCleroSelection() {
+    editedEntidade.id_reitor = undefined;
+    selectedCleroName = '';
+    cleroSearchQuery = '';
+    showCleroDropdown = false;
+  }
+
+  function handleCleroInputFocus() {
+    showCleroDropdown = true;
+  }
+
+  function handleCleroInputBlur() {
+    // Delay to allow click on dropdown item
+    setTimeout(() => {
+      showCleroDropdown = false;
+    }, 200);
+  }
+
+
   onMount(async () => {
     try {
       tipos = await dataService.getTipos();
@@ -83,6 +137,10 @@
         jurisdicao: d.jurisdicao,
         loc_sede: d.loc_sede
       }));
+      
+      // Load clero
+      const cleroData = await dataService.getClero();
+      cleroList = cleroData || [];
       
       if (entidade) {
         originalAddress = `${entidade.cep}, ${entidade.cidade}`;
@@ -550,6 +608,58 @@
               <option value={diocese.id}>{diocese.nome} - {diocese.loc_sede || ''}</option>
             {/each}
           </select>
+        </div>
+        <div class="form-group">
+          <label for="reitor">Reitor</label>
+          <div class="clero-dropdown-container">
+            <div class="clero-input-wrapper">
+              <input 
+                type="text" 
+                placeholder="Buscar e selecionar clérigo..."
+                bind:value={cleroSearchQuery}
+                on:focus={handleCleroInputFocus}
+                on:blur={handleCleroInputBlur}
+                class="clero-search-input"
+                autocomplete="off"
+              />
+              {#if editedEntidade.id_reitor}
+                <button 
+                  type="button" 
+                  class="clear-selection-btn"
+                  on:click={clearCleroSelection}
+                  title="Limpar seleção"
+                >
+                  ✕
+                </button>
+              {/if}
+            </div>
+            {#if showCleroDropdown}
+              <div class="clero-dropdown-list" transition:fade={{ duration: 150 }}>
+                {#if filteredCleroList.length > 0}
+                  {#each filteredCleroList as clerigo}
+                    <div 
+                      class="clero-dropdown-item"
+                      class:selected={editedEntidade.id_reitor === clerigo.id}
+                      on:mousedown={() => selectClerigo(clerigo)}
+                      role="button"
+                      tabindex="0"
+                    >
+                      <div class="clerigo-name">
+                        {clerigo.titulo ? `${clerigo.titulo} ` : ''}{clerigo.nome_completo}
+                      </div>
+                      {#if clerigo.email}
+                        <div class="clerigo-email">{clerigo.email}</div>
+                      {/if}
+                    </div>
+                  {/each}
+                {:else}
+                  <div class="clero-dropdown-item no-results">
+                    Nenhum clérigo encontrado
+                  </div>
+                {/if}
+              </div>
+            {/if}
+          </div>
         </div>
         <div class="form-group">
           <label for="status">Status:</label>
@@ -1283,4 +1393,130 @@
     color: #0c5460;
     font-size: 0.9rem;
   }
+
+  /* Clero Dropdown Styles */
+  .clero-dropdown-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .clero-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .clero-search-input {
+    width: 100%;
+    padding: 0.75rem;
+    padding-right: 2.5rem;
+    border: 1px solid #E6D7CC;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    background-color: #FDFCFB;
+    transition: all 0.2s;
+  }
+
+  .clero-search-input:focus {
+    outline: none;
+    border-color: #CF4A46;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(207, 74, 70, 0.1);
+  }
+
+  .clear-selection-btn {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+
+  .clear-selection-btn:hover {
+    background-color: #f8f8f8;
+    color: #CF4A46;
+  }
+
+  .clero-dropdown-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #E6D7CC;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+  }
+
+  .clero-dropdown-item {
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    border-bottom: 1px solid #F9F5F2;
+  }
+
+  .clero-dropdown-item:last-child {
+    border-bottom: none;
+  }
+
+  .clero-dropdown-item:hover {
+    background-color: #FFF5F4;
+  }
+
+  .clero-dropdown-item.selected {
+    background-color: #FFF5F4;
+    border-left: 3px solid #CF4A46;
+  }
+
+  .clero-dropdown-item.no-results {
+    color: #999;
+    cursor: default;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .clero-dropdown-item.no-results:hover {
+    background-color: transparent;
+  }
+
+  .clerigo-name {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.25rem;
+  }
+
+  .clerigo-email {
+    font-size: 0.85rem;
+    color: #666;
+  }
+
+  .clero-dropdown-list::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .clero-dropdown-list::-webkit-scrollbar-track {
+    background: #F9F5F2;
+  }
+
+  .clero-dropdown-list::-webkit-scrollbar-thumb {
+    background: #E6D7CC;
+    border-radius: 4px;
+  }
+
+  .clero-dropdown-list::-webkit-scrollbar-thumb:hover {
+    background: #CF4A46;
+  }
 </style>
+
+

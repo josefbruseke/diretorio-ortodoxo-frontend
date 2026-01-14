@@ -40,6 +40,7 @@ export interface ApiEntidade {
   url_foto?: string | null;
   status?: string;
   id_diocese?: number;
+  id_reitor?: number;
   diocese?: {
     id: number;
     nome: string;
@@ -354,9 +355,16 @@ export function mapApiEntidadeToLocal(apiEntidade: ApiEntidade): import('./types
   return {
     id: apiEntidade.id,
     id_diocese: apiEntidade.diocese?.id || 0,
+    id_reitor: apiEntidade.id_reitor,
     nome: apiEntidade.nome,
     tipo: apiEntidade.tipo as any,
     reitor: apiEntidade.reitor?.nome_completo || '',
+    reitorInfo: apiEntidade.reitor ? {
+      id: apiEntidade.reitor.id,
+      nome_completo: apiEntidade.reitor.nome_completo,
+      titulo: apiEntidade.reitor.titulo,
+      email: apiEntidade.reitor.email
+    } : undefined,
     cep: apiEntidade.cep,
     estado: apiEntidade.estado,
     cidade: apiEntidade.cidade,

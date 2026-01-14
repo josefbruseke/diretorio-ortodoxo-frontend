@@ -91,21 +91,40 @@
           {/if}
           <div class="info-row">
             <dt>Reitor:</dt>
-            <dd>{entidade.reitor}</dd>
+            <dd>
+              {#if entidade.reitorInfo}
+                <div class="reitor-info">
+                  <div class="reitor-name">
+                    {entidade.reitorInfo.titulo ? `${entidade.reitorInfo.titulo} ` : ''}{entidade.reitorInfo.nome_completo}
+                  </div>
+                  {#if entidade.reitorInfo.email}
+                    <div class="reitor-email">
+                      <a href="mailto:{entidade.reitorInfo.email}">{entidade.reitorInfo.email}</a>
+                    </div>
+                  {/if}
+                </div>
+              {:else if entidade.reitor}
+                {entidade.reitor}
+              {:else}
+                Não informado
+              {/if}
+            </dd>
           </div>
-          <div class="info-row">
-            <dt>Diocese:</dt>
-            <dd>{entidade.diocese.nome}</dd>
-          </div>
-          <div class="info-row">
-            <dt>Jurisdição:</dt>
-            <dd>{getJurisdicaoLabel(entidade.diocese.jurisdicao)}</dd>
-          </div>
-          {#if entidade.diocese.bispo}
+          {#if entidade.diocese}
             <div class="info-row">
-              <dt>Bispo:</dt>
-              <dd>S.E.R. {entidade.diocese.bispo}</dd>
+              <dt>Diocese:</dt>
+              <dd>{entidade.diocese.nome}</dd>
             </div>
+            <div class="info-row">
+              <dt>Jurisdição:</dt>
+              <dd>{getJurisdicaoLabel(entidade.diocese.jurisdicao)}</dd>
+            </div>
+            {#if entidade.diocese.bispo}
+              <div class="info-row">
+                <dt>Bispo:</dt>
+                <dd>S.E.R. {entidade.diocese.bispo}</dd>
+              </div>
+            {/if}
           {/if}
         </dl>
       </div>
@@ -705,6 +724,33 @@
   .info-row dd {
     color: var(--cor-azul-marinho-escuro);
     margin: 0;
+  }
+
+  .reitor-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .reitor-name {
+    font-weight: 600;
+    color: var(--cor-azul-marinho-escuro);
+  }
+
+  .reitor-email {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .reitor-email a {
+    color: var(--cor-azul-constantinopolitano);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .reitor-email a:hover {
+    color: var(--cor-dourado-bizantino);
+    text-decoration: underline;
   }
 
   .status-text {

@@ -32,12 +32,19 @@ export interface FotoEntidade {
 export interface EntidadeEclesiastica {
   id: number;
   id_diocese?: number; // Made optional as it doesn't exist in new schema
+  id_reitor?: number; // Reference to clero table
   nome: string;
   tipo: TipoEntidade;
   santo_padroeiro?: string;
   jurisdicao_imediata?: string;
   patriarcado?: string;
-  reitor: string;
+  reitor: string; // Legacy text field - kept for backward compatibility
+  reitorInfo?: {
+    id: number;
+    nome_completo: string;
+    titulo: string;
+    email: string;
+  }; // Detailed reitor information from clero table
   cep: string;
   estado: string;
   cidade: string;

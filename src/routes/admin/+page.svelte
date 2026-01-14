@@ -109,6 +109,7 @@
           longitude: e.longitude,
           status: e.status,
           id_diocese: e.id_diocese,
+          id_reitor: e.id_reitor,
           diocese: e.diocese ? {
             id: e.diocese.id,
             nome: e.diocese.nome,
@@ -172,7 +173,8 @@
         longitude: updatedEntidade.longitude,
         url_foto: updatedEntidade.url_foto,
         status: updatedEntidade.status,
-        id_diocese: updatedEntidade.id_diocese
+        id_diocese: updatedEntidade.id_diocese,
+        id_reitor: updatedEntidade.id_reitor
       };
       
       let savedEntidade: ApiEntidade | undefined;
@@ -201,7 +203,8 @@
               longitude: savedEntidade.longitude,
               url_foto: savedEntidade.url_foto,
               status: savedEntidade.status,
-              id_diocese: savedEntidade.id_diocese
+              id_diocese: savedEntidade.id_diocese,
+              id_reitor: savedEntidade.id_reitor
             };
             entidades = entidades; // Trigger reactivity
           }
@@ -815,6 +818,7 @@
             <th>Nome</th>
             <th>Tipo</th>
             <th>Diocese</th>
+            <th>Reitor</th>
             <th>Cidade</th>
             <th>Estado</th>
             <th>Status</th>
@@ -829,6 +833,7 @@
               <td>{entidade.nome}</td>
               <td>{entidade.tipo}</td>
               <td>{entidade.diocese?.nome || '-'}</td>
+              <td>{entidade.reitor ? `${entidade.reitor.titulo ? entidade.reitor.titulo + ' ' : ''}${entidade.reitor.nome_completo}` : '-'}</td>
               <td>{entidade.cidade}</td>
               <td>{entidade.estado}</td>
               <td>

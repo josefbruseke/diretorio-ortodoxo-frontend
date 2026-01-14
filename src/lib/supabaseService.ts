@@ -611,12 +611,19 @@ export function mapSupabaseEntidadeToLocal(supabaseEntidade: SupabaseEntidadeWit
   return {
     id: supabaseEntidade.id,
     id_diocese: supabaseEntidade.id_diocese,
+    id_reitor: supabaseEntidade.id_reitor,
     nome: supabaseEntidade.nome_comunidade,
     tipo: supabaseEntidade.tipo as TipoEntidade,
     santo_padroeiro: supabaseEntidade.santo_padroeiro,
     jurisdicao_imediata: supabaseEntidade.jurisdicao_imediata,
     patriarcado: supabaseEntidade.patriarcado,
     reitor: supabaseEntidade.reitor || supabaseEntidade.clero?.nome_completo || '',
+    reitorInfo: supabaseEntidade.clero ? {
+      id: supabaseEntidade.clero.id,
+      nome_completo: supabaseEntidade.clero.nome_completo,
+      titulo: supabaseEntidade.clero.titulo || '',
+      email: supabaseEntidade.clero.email || ''
+    } : undefined,
     cep: supabaseEntidade.cep || '',
     estado: supabaseEntidade.uf || '',
     cidade: supabaseEntidade.cidade || '',
