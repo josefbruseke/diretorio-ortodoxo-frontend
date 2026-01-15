@@ -5,7 +5,7 @@ export const jurisdicaoLabels: Record<Jurisdicao, string> = {
   'PatriarcadoDeAntioquia': 'Patriarcado de Antioquia',
   'PatriarcadoDeMoscou': 'Patriarcado de Moscou',
   'PatriarcadoDaServia': 'Patriarcado da Sérvia',
-  'IgrejaAutocefalaDoPolonia': 'Igreja Autocéfala da Polônia'
+  'IgrejaAutocefalaDaPolonia': 'Igreja Autocéfala da Polônia'
 };
 
 export const tipoEntidadeLabels: Record<string, string> = {
@@ -91,7 +91,7 @@ const jurisdicaoPrecedencia: Record<Jurisdicao, number> = {
   'PatriarcadoDeAntioquia': 2,
   'PatriarcadoDeMoscou': 3,
   'PatriarcadoDaServia': 4,
-  'IgrejaAutocefalaDoPolonia': 5
+  'IgrejaAutocefalaDaPolonia': 5
 };
 
 // Ordem de precedência dos tipos de entidade
@@ -240,7 +240,7 @@ function getJurisdicaoFromString(patriarcado: string): Jurisdicao | null {
     return 'PatriarcadoDaServia';
   }
   if (normalized.includes('polônia') || normalized.includes('polonia')) {
-    return 'IgrejaAutocefalaDoPolonia';
+    return 'IgrejaAutocefalaDaPolonia';
   }
   
   return null;

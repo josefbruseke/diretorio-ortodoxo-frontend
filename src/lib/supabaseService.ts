@@ -301,7 +301,7 @@ class SupabaseService {
       'PatriarcadoDeAntioquia', 
       'PatriarcadoDeMoscou',
       'PatriarcadoDaServia',
-      'IgrejaAutocefalaDoPolonia'
+      'IgrejaAutocefalaDaPolonia'
     ];
   }
 

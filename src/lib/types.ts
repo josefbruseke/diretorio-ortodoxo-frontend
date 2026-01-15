@@ -3,7 +3,7 @@ export type Jurisdicao =
   | 'PatriarcadoDeAntioquia' 
   | 'PatriarcadoDeMoscou'
   | 'PatriarcadoDaServia'
-  | 'IgrejaAutocefalaDoPolonia';
+  | 'IgrejaAutocefalaDaPolonia';
 
 export type TipoEntidade = 
   | 'Catedral'
