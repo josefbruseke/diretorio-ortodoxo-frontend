@@ -5,10 +5,11 @@
   import { supabase } from '$lib/supabaseClient.js';
   import { dataService } from '$lib/dataService.js';
   import type { ApiEntidade, ApiDiocese, ApiClero } from '$lib/api.js';
-  import type { EntidadeEclesiastica, Diocese } from '$lib/types.js';
+  import type { EntidadeEclesiastica, Diocese, Jurisdicao } from '$lib/types.js';
   import EditEntidadeModal from '$lib/components/EditEntidadeModal.svelte';
   import EditDioceseModal from '$lib/components/EditDioceseModal.svelte';
   import EditCleroModal from '$lib/components/EditCleroModal.svelte';
+  import { getJurisdicaoLabel } from '$lib/utils.js';
 
   // Auth state
   let user = writable<User | null>(null);
@@ -866,7 +867,7 @@
           <select id="jurisdicao-filter" bind:value={selectedJurisdicao}>
             <option value="">Todas as Jurisdições</option>
             {#each jurisdicaoOptions as jurisdicao}
-              <option value={jurisdicao}>{jurisdicao}</option>
+              <option value={jurisdicao}>{getJurisdicaoLabel(jurisdicao as Jurisdicao)}</option>
             {/each}
           </select>
         </div>
@@ -893,7 +894,7 @@
           {#each filteredDioceses as diocese}
             <tr>
               <td>{diocese.nome}</td>
-              <td>{diocese.jurisdicao}</td>
+              <td>{getJurisdicaoLabel(diocese.jurisdicao as Jurisdicao)}</td>
               <td>{diocese.loc_sede}</td>
               <td><button on:click={() => openEditDioceseModal(diocese)}>Edit</button></td>
             </tr>

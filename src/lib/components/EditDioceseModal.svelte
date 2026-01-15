@@ -3,6 +3,8 @@
   import { dataService } from '../dataService.js';
   import type { ApiEntidade, ApiDiocese, ApiClero } from '../api.js';
   import { fade } from 'svelte/transition';
+  import { getJurisdicaoLabel } from '../utils.js';
+  import type { Jurisdicao } from '../types.js';
 
   export let diocese: ApiDiocese | null = null;
   export let showModal: boolean;
@@ -160,7 +162,7 @@
           >
             <option value="">Selecione uma jurisdição</option>
             {#each jurisdicoes as jurisdicao}
-              <option value={jurisdicao}>{jurisdicao}</option>
+              <option value={jurisdicao}>{getJurisdicaoLabel(jurisdicao as Jurisdicao)}</option>
             {/each}
           </select>
           {#if validationErrors.jurisdicao}

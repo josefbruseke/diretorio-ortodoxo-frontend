@@ -6,6 +6,8 @@
   import { supabaseService } from '../supabaseService.js';
   import type { ApiEntidade, ApiDiocese, ApiClero } from '../api.js';
   import { fade } from 'svelte/transition';
+  import { getJurisdicaoLabel } from '../utils.js';
+  import type { Jurisdicao } from '../types.js';
 
   export let entidade: ApiEntidade | null = null;
   export let showModal: boolean;
@@ -605,7 +607,9 @@
           >
             <option value={null}>Selecione uma diocese</option>
             {#each dioceses as diocese}
-              <option value={diocese.id}>{diocese.nome} - {diocese.loc_sede || ''}</option>
+              <option value={diocese.id}>
+                {diocese.nome} - {diocese.loc_sede || ''} ({getJurisdicaoLabel(diocese.jurisdicao as Jurisdicao)})
+              </option>
             {/each}
           </select>
         </div>
