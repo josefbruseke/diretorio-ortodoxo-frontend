@@ -116,6 +116,12 @@
             nome: e.diocese.nome,
             jurisdicao: e.diocese.jurisdicao,
             loc_sede: e.diocese.loc_sede
+          } : undefined,
+          reitor: (e as any).reitorInfo ? {
+            id: (e as any).reitorInfo.id,
+            nome_completo: (e as any).reitorInfo.nome_completo,
+            titulo: (e as any).reitorInfo.titulo || '',
+            email: (e as any).reitorInfo.email || ''
           } : undefined
         }));
       } else if (table === 'dioceses') {
@@ -185,31 +191,47 @@
         savedEntidade = await dataService.updateEntidade(updatedEntidade.id, dataToSave);
         
         if (savedEntidade) {
-          const index = entidades.findIndex((e) => e.id === savedEntidade!.id);
-          if (index !== -1) {
-            // Convert back to ApiEntidade format
-            entidades[index] = {
-              ...entidades[index],
-              id: savedEntidade.id,
-              nome: savedEntidade.nome,
-              tipo: savedEntidade.tipo,
-              endereco: savedEntidade.endereco,
-              cidade: savedEntidade.cidade,
-              estado: savedEntidade.estado,
-              cep: savedEntidade.cep,
-              telefone: savedEntidade.telefone,
-              email: savedEntidade.email,
-              website: savedEntidade.website,
-              link_maps: savedEntidade.link_maps,
-              descricao: savedEntidade.descricao,
-              latitude: savedEntidade.latitude,
-              longitude: savedEntidade.longitude,
-              url_foto: savedEntidade.url_foto,
-              status: savedEntidade.status,
-              id_diocese: savedEntidade.id_diocese,
-              id_reitor: savedEntidade.id_reitor
-            };
-            entidades = entidades; // Trigger reactivity
+          // Reload the full entidade with relations to get the reitor info
+          const fullEntidade = await dataService.getEntidade(savedEntidade.id);
+          
+          if (fullEntidade) {
+            const index = entidades.findIndex((e) => e.id === savedEntidade!.id);
+            if (index !== -1) {
+              // Convert to ApiEntidade format with all relations
+              entidades[index] = {
+                id: fullEntidade.id,
+                nome: fullEntidade.nome,
+                tipo: fullEntidade.tipo,
+                endereco: fullEntidade.endereco,
+                cidade: fullEntidade.cidade,
+                estado: fullEntidade.estado,
+                cep: fullEntidade.cep,
+                telefone: fullEntidade.telefone,
+                email: fullEntidade.email,
+                website: fullEntidade.website,
+                link_maps: fullEntidade.link_maps,
+                descricao: fullEntidade.descricao,
+                latitude: fullEntidade.latitude,
+                longitude: fullEntidade.longitude,
+                url_foto: fullEntidade.url_foto,
+                status: fullEntidade.status,
+                id_diocese: fullEntidade.id_diocese,
+                id_reitor: fullEntidade.id_reitor,
+                diocese: fullEntidade.diocese ? {
+                  id: fullEntidade.diocese.id,
+                  nome: fullEntidade.diocese.nome,
+                  jurisdicao: fullEntidade.diocese.jurisdicao,
+                  loc_sede: fullEntidade.diocese.loc_sede
+                } : undefined,
+                reitor: (fullEntidade as any).reitorInfo ? {
+                  id: (fullEntidade as any).reitorInfo.id,
+                  nome_completo: (fullEntidade as any).reitorInfo.nome_completo,
+                  titulo: (fullEntidade as any).reitorInfo.titulo || '',
+                  email: (fullEntidade as any).reitorInfo.email || ''
+                } : undefined
+              };
+              entidades = entidades; // Trigger reactivity
+            }
           }
         }
       } else {
@@ -217,8 +239,46 @@
         savedEntidade = await dataService.createEntidade(dataToSave);
         
         if (savedEntidade) {
-          // Add to the list
-          entidades = [...entidades, savedEntidade];
+          // Reload the full entidade with relations to get the reitor info
+          const fullEntidade = await dataService.getEntidade(savedEntidade.id);
+          
+          if (fullEntidade) {
+            // Add to the list with complete data
+            const newEntidade: ApiEntidade = {
+              id: fullEntidade.id,
+              nome: fullEntidade.nome,
+              tipo: fullEntidade.tipo,
+              endereco: fullEntidade.endereco,
+              cidade: fullEntidade.cidade,
+              estado: fullEntidade.estado,
+              cep: fullEntidade.cep,
+              telefone: fullEntidade.telefone,
+              email: fullEntidade.email,
+              website: fullEntidade.website,
+              link_maps: fullEntidade.link_maps,
+              descricao: fullEntidade.descricao,
+              latitude: fullEntidade.latitude,
+              longitude: fullEntidade.longitude,
+              url_foto: fullEntidade.url_foto,
+              status: fullEntidade.status,
+              id_diocese: fullEntidade.id_diocese,
+              id_reitor: fullEntidade.id_reitor,
+              diocese: fullEntidade.diocese ? {
+                id: fullEntidade.diocese.id,
+                nome: fullEntidade.diocese.nome,
+                jurisdicao: fullEntidade.diocese.jurisdicao,
+                loc_sede: fullEntidade.diocese.loc_sede
+              } : undefined,
+              reitor: (fullEntidade as any).reitorInfo ? {
+                id: (fullEntidade as any).reitorInfo.id,
+                nome_completo: (fullEntidade as any).reitorInfo.nome_completo,
+                titulo: (fullEntidade as any).reitorInfo.titulo || '',
+                email: (fullEntidade as any).reitorInfo.email || ''
+              } : undefined
+            };
+            
+            entidades = [...entidades, newEntidade];
+          }
           
           // If there's an image file to upload, update the modal with the new ID
           if (imageFile) {

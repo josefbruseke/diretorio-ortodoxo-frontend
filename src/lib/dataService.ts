@@ -274,6 +274,7 @@ export class DataService {
           longitude: data.longitude,
           status: data.status,
           id_diocese: data.id_diocese,
+          id_reitor: data.id_reitor,
           ultima_atualizacao: new Date().toISOString()
         };
         
