@@ -41,6 +41,7 @@ export interface ApiEntidade {
   status?: string;
   id_diocese?: number;
   id_reitor?: number;
+  link_maps?: string | null;
   diocese?: {
     id: number;
     nome: string;

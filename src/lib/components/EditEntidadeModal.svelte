@@ -61,6 +61,7 @@
       telefone: '',
       email: '',
       website: '',
+      link_maps: null,
       descricao: '',
       latitude: undefined,
       longitude: undefined,
@@ -338,6 +339,10 @@
 
     if (editedEntidade.website && !validateUrl(editedEntidade.website)) {
       validationErrors.website = 'URL inválida';
+    }
+
+    if (editedEntidade.link_maps && !validateUrl(editedEntidade.link_maps)) {
+      validationErrors.link_maps = 'URL inválida';
     }
 
     // Coordinate validation
@@ -772,6 +777,20 @@
           />
           {#if validationErrors.website}
             <span class="field-error">{validationErrors.website}</span>
+          {/if}
+        </div>
+        <div class="form-group">
+          <label for="link_maps">Link do Google Maps:</label>
+          <input 
+            id="link_maps" 
+            type="text" 
+            bind:value={editedEntidade.link_maps}
+            on:input={() => clearFieldError('link_maps')}
+            class:error={validationErrors.link_maps}
+            placeholder="https://maps.google.com/..."
+          />
+          {#if validationErrors.link_maps}
+            <span class="field-error">{validationErrors.link_maps}</span>
           {/if}
         </div>
         <div class="form-group">
