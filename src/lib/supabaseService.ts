@@ -438,6 +438,30 @@ class SupabaseService {
 
   // Delete methods for admin functionality
   async deleteEntidade(id: number): Promise<void> {
+    // Check if this entidade has any photos
+    const { data: fotos, error: checkError } = await supabase
+      .from('fotosentidade')
+      .select('id')
+      .eq('id_entidade', id);
+
+    if (checkError) {
+      console.error('Error checking entidade photos:', checkError);
+      throw new Error(checkError.message);
+    }
+
+    // If there are photos, delete them first
+    if (fotos && fotos.length > 0) {
+      const { error: deleteFotosError } = await supabase
+        .from('fotosentidade')
+        .delete()
+        .eq('id_entidade', id);
+
+      if (deleteFotosError) {
+        console.error('Error deleting entidade photos:', deleteFotosError);
+        throw new Error(`Erro ao deletar fotos da entidade: ${deleteFotosError.message}`);
+      }
+    }
+
     const { error } = await supabase
       .from('entidade_eclesiastica')
       .delete()
@@ -450,6 +474,26 @@ class SupabaseService {
   }
 
   async deleteDiocese(id: number): Promise<void> {
+    // Check if this diocese has any entidades
+    const { data: entidades, error: checkError } = await supabase
+      .from('entidade_eclesiastica')
+      .select('id, nome_comunidade')
+      .eq('id_diocese', id);
+
+    if (checkError) {
+      console.error('Error checking diocese references:', checkError);
+      throw new Error(checkError.message);
+    }
+
+    if (entidades && entidades.length > 0) {
+      const entidadeNames = entidades.slice(0, 3).map(e => e.nome_comunidade).join(', ');
+      const moreText = entidades.length > 3 ? ` e mais ${entidades.length - 3}` : '';
+      throw new Error(
+        `Não é possível deletar esta diocese pois ela possui ${entidades.length} ${entidades.length === 1 ? 'entidade associada' : 'entidades associadas'}: ${entidadeNames}${moreText}. ` +
+        `Por favor, remova ou transfira ${entidades.length === 1 ? 'esta entidade' : 'estas entidades'} antes de deletar a diocese.`
+      );
+    }
+
     const { error } = await supabase
       .from('diocese')
       .delete()
@@ -462,6 +506,29 @@ class SupabaseService {
   }
 
   async deleteClero(id: number): Promise<void> {
+    // Check if this clero is being used as reitor in any entidade
+    const { data: entidades, error: checkError } = await supabase
+      .from('entidade_eclesiastica')
+      .select('id, nome_comunidade')
+      .eq('id_reitor', id);
+
+    if (checkError) {
+      console.error('Error checking clero references:', checkError);
+      throw new Error(checkError.message);
+    }
+
+    if (entidades && entidades.length > 0) {
+      // Create detailed message with full entity names
+      const entidadeList = entidades.map(e => `"${e.nome_comunidade}"`).join(', ');
+      
+      const errorMessage = 
+        `Não é possível deletar este clérigo pois ele é reitor ${entidades.length === 1 ? 'da entidade' : 'das entidades'}: ${entidadeList}. ` +
+        `Por favor, busque ${entidades.length === 1 ? 'esta entidade' : 'estas entidades'} na aba "Entidades", ` +
+        `${entidades.length === 1 ? 'edite-a' : 'edite-as'} e remova ou altere o reitor antes de deletar este clérigo.`;
+      
+      throw new Error(errorMessage);
+    }
+
     const { error } = await supabase
       .from('clero')
       .delete()
@@ -591,7 +658,7 @@ export function mapSupabaseEntidadeToLocal(supabaseEntidade: SupabaseEntidadeWit
     } else if (p.includes('sérvia') || p.includes('servia') || p.includes('sérvio')) {
       return 'PatriarcadoDaServia';
     } else if (p.includes('polônia') || p.includes('polonia') || p.includes('polónia')) {
-      return 'IgrejaAutocefalaDoPolonia';
+      return 'IgrejaAutocefalaDaPolonia';
     }
     return 'PatriarcadoEcumenico'; // default
   };

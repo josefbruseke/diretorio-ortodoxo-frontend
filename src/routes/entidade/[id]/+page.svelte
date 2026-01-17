@@ -116,7 +116,7 @@
               <dd>{entidade.diocese.nome}</dd>
             </div>
             <div class="info-row">
-              <dt>Jurisdição:</dt>
+              <dt>Patriarcado:</dt>
               <dd>{getJurisdicaoLabel(entidade.diocese.jurisdicao)}</dd>
             </div>
             {#if entidade.diocese.bispo}

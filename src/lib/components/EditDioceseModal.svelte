@@ -152,7 +152,7 @@
           {/if}
         </div>
         <div class="form-group">
-          <label for="jurisdicao">Jurisdição: <span class="required">*</span></label>
+          <label for="jurisdicao">Patriarcado: <span class="required">*</span></label>
           <select 
             id="jurisdicao" 
             bind:value={editedDiocese.jurisdicao}

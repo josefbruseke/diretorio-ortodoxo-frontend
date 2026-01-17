@@ -425,7 +425,7 @@
       closeEditEntidadeModal();
       error = null; // Clear any previous errors
     } catch (e: any) {
-      error = `Failed to delete entidade: ${e.message}`;
+      error = `Erro ao deletar entidade: ${e.message}`;
     }
   }
 
@@ -440,7 +440,7 @@
       closeEditDioceseModal();
       error = null; // Clear any previous errors
     } catch (e: any) {
-      error = `Failed to delete diocese: ${e.message}`;
+      error = `Erro ao deletar diocese: ${e.message}`;
     }
   }
 
@@ -455,7 +455,7 @@
       closeEditCleroModal();
       error = null; // Clear any previous errors
     } catch (e: any) {
-      error = `Failed to delete clerigo: ${e.message}`;
+      error = `Erro ao deletar clérigo: ${e.message}`;
     }
   }
 

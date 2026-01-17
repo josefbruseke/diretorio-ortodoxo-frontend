@@ -440,13 +440,17 @@ export class DataService {
         await supabaseService.deleteEntidade(id);
         return;
       } catch (error) {
-        console.error('Supabase error, falling back to API:', error);
-        this.useSupabase = false;
+        console.error('Erro ao deletar entidade no Supabase:', error);
+        throw error; // Throw the error instead of falling back
       }
     }
     
-    // Fallback to API
-    await apiService.deleteEntidade(id, fetchFn);
+    // Fallback to API only if explicitly not using Supabase
+    if (this.apiAvailable) {
+      await apiService.deleteEntidade(id, fetchFn);
+    } else {
+      throw new Error('API não está disponível. Configure o Supabase ou inicie o backend.');
+    }
   }
 
   async deleteDiocese(id: number, fetchFn?: typeof fetch): Promise<void> {
@@ -455,13 +459,17 @@ export class DataService {
         await supabaseService.deleteDiocese(id);
         return;
       } catch (error) {
-        console.error('Supabase error, falling back to API:', error);
-        this.useSupabase = false;
+        console.error('Erro ao deletar diocese no Supabase:', error);
+        throw error; // Throw the error instead of falling back
       }
     }
     
-    // Fallback to API
-    await apiService.deleteDiocese(id, fetchFn);
+    // Fallback to API only if explicitly not using Supabase
+    if (this.apiAvailable) {
+      await apiService.deleteDiocese(id, fetchFn);
+    } else {
+      throw new Error('API não está disponível. Configure o Supabase ou inicie o backend.');
+    }
   }
 
   async deleteClero(id: number, fetchFn?: typeof fetch): Promise<void> {
@@ -470,13 +478,17 @@ export class DataService {
         await supabaseService.deleteClero(id);
         return;
       } catch (error) {
-        console.error('Supabase error, falling back to API:', error);
-        this.useSupabase = false;
+        console.error('Erro ao deletar clérigo no Supabase:', error);
+        throw error; // Throw the error instead of falling back
       }
     }
     
-    // Fallback to API
-    await apiService.deleteClero(id, fetchFn);
+    // Fallback to API only if explicitly not using Supabase
+    if (this.apiAvailable) {
+      await apiService.deleteClero(id, fetchFn);
+    } else {
+      throw new Error('API não está disponível. Configure o Supabase ou inicie o backend.');
+    }
   }
 
   async getClero(fetchFn?: typeof fetch): Promise<any[]> {
