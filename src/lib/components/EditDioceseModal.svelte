@@ -160,7 +160,7 @@
             class:error={validationErrors.jurisdicao}
             required
           >
-            <option value="">Selecione uma jurisdição</option>
+            <option value="">Selecione um patriarcado</option>
             {#each jurisdicoes as jurisdicao}
               <option value={jurisdicao}>{getJurisdicaoLabel(jurisdicao as Jurisdicao)}</option>
             {/each}

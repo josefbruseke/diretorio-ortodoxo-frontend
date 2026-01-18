@@ -925,9 +925,9 @@
           />
         </div>
         <div class="filter-group">
-          <label for="jurisdicao-filter">Jurisdição</label>
+          <label for="jurisdicao-filter">Patriarcado</label>
           <select id="jurisdicao-filter" bind:value={selectedJurisdicao}>
-            <option value="">Todas as Jurisdições</option>
+            <option value="">Todos os Patriarcados</option>
             {#each jurisdicaoOptions as jurisdicao}
               <option value={jurisdicao}>{getJurisdicaoLabel(jurisdicao as Jurisdicao)}</option>
             {/each}
@@ -947,7 +947,7 @@
         <thead>
           <tr>
             <th>Nome</th>
-            <th>Jurisdição</th>
+            <th>Patriarcado</th>
             <th>Sede</th>
             <th>Ações</th>
           </tr>

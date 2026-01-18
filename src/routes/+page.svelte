@@ -524,11 +524,11 @@
         {/if}
       </section>
 
-      <!-- Filtro por Jurisdição -->
+      <!-- Filtro por Patriarcado -->
       <section class="filter-section">
-        <h3>Jurisdição</h3>
+        <h3>Patriarcado</h3>
         {#if loading}
-          <div class="filter-loading">Carregando jurisdições...</div>
+          <div class="filter-loading">Carregando patriarcados...</div>
         {:else}
           <div class="dropdown-container">
             <button 
@@ -697,11 +697,11 @@
           {/if}
         </div>
 
-        <!-- Filtro por Jurisdição -->
+        <!-- Filtro por Patriarcado -->
         <div class="mobile-filter-item">
-          <div class="mobile-filter-label">Jurisdição:</div>
+          <div class="mobile-filter-label">Patriarcado:</div>
           {#if loading}
-            <div class="filter-loading">Carregando jurisdições...</div>
+            <div class="filter-loading">Carregando patriarcados...</div>
           {:else}
             <div class="dropdown-container">
               <button 
@@ -852,7 +852,7 @@
                   <th>Tipo</th>
                   <th>Cidade</th>
                   <th>Estado</th>
-                  <th>Jurisdição</th>
+                  <th>Patriarcado</th>
                   {#if showNearMe && userLocation}
                     <th>Distância</th>
                   {/if}
