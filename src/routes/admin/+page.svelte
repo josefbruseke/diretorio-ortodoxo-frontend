@@ -508,7 +508,7 @@
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Lato', sans-serif;
   }
 
   h1 {
@@ -947,7 +947,7 @@
         <thead>
           <tr>
             <th>Nome</th>
-            <th>Patriarcado</th>
+            <th>Patriarcado/Igreja</th>
             <th>Sede</th>
             <th>Ações</th>
           </tr>

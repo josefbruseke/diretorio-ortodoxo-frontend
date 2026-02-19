@@ -18,14 +18,34 @@
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+  }
+
+  .footer-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-section:nth-child(2) {
+    justify-self: center;
+  }
+
+  .footer-section:nth-child(3) {
+    justify-self: end;
   }
 
   .footer-section h3 {
     color: var(--cor-ouro-bizantino);
     font-size: 1.125rem;
     margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      grid-template-columns: 1fr;
+    }
   }
 
   .jurisdiction-seals {
@@ -89,7 +109,7 @@
   <slot />
 </main>
 
-<footer class="footer">
+<footer id="footer" class="footer">
   <div class="footer-content">
     <div class="footer-section">
       <h3>Sobre o Diretório</h3>
@@ -105,29 +125,13 @@
     </div>
     
     <div class="footer-section">
-      <h3>Jurisdições Canônicas</h3>
-      <div class="jurisdiction-seals">
-        <div class="seal-item">
-          <img src="/1-Patriarcado-Ecumenico.png" alt="Patriarcado Ecumênico" class="seal" title="Patriarcado Ecumênico" />
-          <span class="seal-label">Patriarcado Ecumênico</span>
-        </div>
-        <div class="seal-item">
-          <img src="/2-Patriarcado-de-Antioquia.png" alt="Patriarcado de Antioquia" class="seal" title="Patriarcado de Antioquia" />
-          <span class="seal-label">Patriarcado de Antioquia</span>
-        </div>
-        <div class="seal-item">
-          <img src="/3-Patriarcado-de-Moscou.png" alt="Patriarcado de Moscou" class="seal" title="Patriarcado de Moscou" />
-          <span class="seal-label">Patriarcado de Moscou</span>
-        </div>
-        <div class="seal-item">
-          <img src="/4-Patriarcado-da-Servia.png" alt="Patriarcado da Sérvia" class="seal" title="Patriarcado da Sérvia" />
-          <span class="seal-label">Patriarcado da Sérvia</span>
-        </div>
-        <div class="seal-item">
-          <img src="/5-Igreja-da-Polonia.png" alt="Igreja da Polônia" class="seal" title="Igreja da Polônia" />
-          <span class="seal-label">Igreja da Polônia</span>
-        </div>
-      </div>
+      <h3>Dados Incompletos?</h3>
+      <p class="footer-text">
+        Solicite uma atualização:<br />
+        <a href="https://form.jotform.com/260157201328650" target="_blank" rel="noopener noreferrer" style="color: var(--cor-ouro-bizantino); text-decoration: none;">
+          Formulário de atualização →
+        </a>
+      </p>
     </div>
     
     <div class="footer-section">

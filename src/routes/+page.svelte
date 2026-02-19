@@ -526,7 +526,7 @@
 
       <!-- Filtro por Patriarcado -->
       <section class="filter-section">
-        <h3>Patriarcado</h3>
+        <h3>Patriarcado/Igreja</h3>
         {#if loading}
           <div class="filter-loading">Carregando patriarcados...</div>
         {:else}
@@ -699,7 +699,7 @@
 
         <!-- Filtro por Patriarcado -->
         <div class="mobile-filter-item">
-          <div class="mobile-filter-label">Patriarcado:</div>
+          <div class="mobile-filter-label">Patriarcado/Igreja:</div>
           {#if loading}
             <div class="filter-loading">Carregando patriarcados...</div>
           {:else}
@@ -956,32 +956,6 @@
         </div>
       </section>
 
-      <!-- Seção de Estatísticas -->
-      <section class="stats-section">
-        <h2>Estatísticas</h2>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <h3>{entidades.length}</h3>
-            <p>Total de Entidades</p>
-          </div>
-          <div class="stat-card">
-            <h3>{new Set(entidades.map(e => e.estado)).size}</h3>
-            <p>Estados Atendidos</p>
-          </div>
-        </div>
-        <div class="stats-by-type">
-          <div class="type-stats-list">
-            {#each Object.entries(tipos) as [tipo, count]}
-              {#if tipo !== 'All'}
-                <div class="type-stat-item">
-                  <span class="type-label">{getTipoEntidadeLabel(tipo)} </span>
-                  <span class="type-count">{count}</span>
-                </div>
-              {/if}
-            {/each}
-          </div>
-        </div>
-      </section>
     </div>
   </main>
 
@@ -990,7 +964,7 @@
 <style>
   :global(body) {
     margin: 0;
-    font-family: 'Georgia', 'Times New Roman', serif;
+    font-family: 'Lato', sans-serif;
     background-color: #fefefe;
     color: #2c1810;
     line-height: 1.6;

@@ -13,7 +13,6 @@
       <button on:click={() => goto('/')} class="back-button">
         ← Voltar ao Diretório
       </button>
-      <img src="/ecclesia-logo.png" alt="Ecclesia Brasil" class="ecclesia-logo" />
       <h1>Apresentação do Diretório Brasil</h1>
     </div>
   </header>
@@ -132,8 +131,14 @@
     </section>
 
     <div class="cta-section">
-      <button on:click={() => goto('/')} class="cta-button">
-        Explorar o Diretório
+      <a href="https://form.jotform.com/260157201328650" target="_blank" rel="noopener noreferrer" class="cta-button">
+        Solicitar Atualização de Dados
+      </a>
+    </div>
+
+    <div class="cta-section">
+      <button on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })} class="scroll-top-button">
+        ↑ Voltar ao topo
       </button>
     </div>
   </article>
@@ -279,6 +284,8 @@
   }
 
   .cta-button {
+    display: inline-block;
+    text-decoration: none;
     background: linear-gradient(135deg, var(--cor-azul-marinho) 0%, var(--cor-azul-mariano) 100%);
     color: white;
     border: none;
@@ -294,6 +301,24 @@
   .cta-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 48, 87, 0.4);
+  }
+
+  .scroll-top-button {
+    background: transparent;
+    color: var(--cor-azul-marinho-escuro);
+    border: 2px solid var(--cor-azul-marinho-escuro);
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .scroll-top-button:hover {
+    background: var(--cor-azul-marinho-escuro);
+    color: white;
+    transform: translateY(-2px);
   }
 
   @media (max-width: 768px) {

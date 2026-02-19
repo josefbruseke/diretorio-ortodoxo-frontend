@@ -116,7 +116,7 @@
               <dd>{entidade.diocese.nome}</dd>
             </div>
             <div class="info-row">
-              <dt>Patriarcado:</dt>
+              <dt>Patriarcado/Igreja:</dt>
               <dd>{getJurisdicaoLabel(entidade.diocese.jurisdicao)}</dd>
             </div>
             {#if entidade.diocese.bispo}
@@ -335,7 +335,7 @@
 <style>
   :global(body) {
     margin: 0;
-    font-family: 'Georgia', 'Times New Roman', serif;
+    font-family: 'Lato', sans-serif;
     background-color: var(--cor-cinza-neve);
     color: var(--cor-azul-marinho-escuro);
     line-height: 1.6;
