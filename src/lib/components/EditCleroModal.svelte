@@ -52,10 +52,6 @@
       validationErrors.nome_completo = 'Nome completo é obrigatório';
     }
 
-    if (!editedClerigo.titulo?.trim()) {
-      validationErrors.titulo = 'Título é obrigatório';
-    }
-
     // Format validations
     if (editedClerigo.email && !validateEmail(editedClerigo.email)) {
       validationErrors.email = 'Email inválido';
@@ -148,14 +144,13 @@
           {/if}
         </div>
         <div class="form-group">
-          <label for="titulo">Título: <span class="required">*</span></label>
+          <label for="titulo">Título:</label>
           <input 
             id="titulo" 
             type="text" 
             bind:value={editedClerigo.titulo}
             on:input={() => clearFieldError('titulo')}
             class:error={validationErrors.titulo}
-            required
           />
           {#if validationErrors.titulo}
             <span class="field-error">{validationErrors.titulo}</span>
