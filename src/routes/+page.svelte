@@ -434,7 +434,6 @@
   <header class="header">
     <div class="header-content">
       <div class="logo-section">
-        <h1 class="main-title" style="color: white;">Diretório Ortodoxo do Brasil</h1>
       </div>
       <nav class="header-nav">
         <a href="https://ecclesia.org.br" target="_blank" rel="noopener noreferrer" class="nav-link">ECCLESIA.ORG</a>
@@ -980,15 +979,15 @@
   }
 
   .header {
-    background: linear-gradient(135deg, rgba(42, 77, 122, 0.8), rgba(42, 77, 122, 0.8)), url('/header-muttergottes.jpg');
+    background: url('/capa_diretorio.jpg');
     background-size: cover;
     background-position: center 40%;
     background-repeat: no-repeat;
     color: #f5f3f0;
-    padding: 3rem 2rem;
+    padding: 2rem 2rem;
     position: relative;
     border-bottom: 4px solid var(--cor-ouro-bizantino);
-    min-height: 300px;
+    min-height: 270px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -996,17 +995,14 @@
 
   .header-content {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 8rem;
-  }
-
-  .logo-section .main-title {
-    font-size: 3rem;
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-shadow: 3px 3px 6px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5);
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-end;
+    margin-top: 0;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
   }
   .header-nav {
     display: flex;
@@ -1014,7 +1010,7 @@
   }
 
   .nav-link {
-    color: #f5f3f0;
+    color: #2c2c2c;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
@@ -1022,11 +1018,11 @@
     padding: 0.5rem 1rem;
     border-radius: 4px;
     transition: background-color 0.3s;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    text-shadow: none;
   }
 
   .nav-link:hover, .nav-link.active {
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(0,0,0,0.08);
   }
 
   .breadcrumb {
@@ -1766,14 +1762,14 @@
     }
     
     .header {
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
     }
     
     .header-content {
-      flex-direction: column;
-      gap: 1rem;
-      text-align: center;
-      padding-top: 1.5rem;
+      flex-direction: row;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      padding-top: 0;
     }
     
     .logo-section .main-title {

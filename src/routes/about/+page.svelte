@@ -156,7 +156,7 @@
   }
 
   .about-header {
-    background: linear-gradient(135deg, var(--cor-azul-marinho-escuro) 0%, var(--cor-azul-marinho) 100%);
+    background: url('/capa_diretorio.jpg') center/cover no-repeat;
     color: white;
     padding: 2rem 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
