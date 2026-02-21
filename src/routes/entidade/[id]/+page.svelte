@@ -95,7 +95,7 @@
               {#if entidade.reitorInfo}
                 <div class="reitor-info">
                   <div class="reitor-name">
-                    {entidade.reitorInfo.titulo ? `${entidade.reitorInfo.titulo} ` : ''}{entidade.reitorInfo.nome_completo}
+                    {entidade.reitorInfo.nome_completo}
                   </div>
                   {#if entidade.reitorInfo.email}
                     <div class="reitor-email">
