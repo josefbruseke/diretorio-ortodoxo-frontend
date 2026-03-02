@@ -123,7 +123,7 @@
       aria-labelledby="modal-title"
       tabindex="-1"
     >
-      <h2 id="modal-title">{diocese ? 'Edit' : 'Create'} Diocese</h2>
+      <h2 id="modal-title">{diocese ? 'Editar' : 'Criar'} Diocese</h2>
       
       {#if Object.keys(validationErrors).length > 0}
         <div class="validation-summary">
@@ -185,16 +185,16 @@
         </div>
         <div class="actions">
           {#if diocese && diocese.id}
-            <button type="button" class="btn-danger" on:click={handleDelete} disabled={isSaving}>Delete</button>
+            <button type="button" class="btn-danger" on:click={handleDelete} disabled={isSaving}>Excluir</button>
           {/if}
           <button type="submit" class="btn-primary" disabled={isSaving}>
             {#if isSaving}
               {diocese ? 'Salvando...' : 'Criando...'}
             {:else}
-              {diocese ? 'Save' : 'Create'}
+              {diocese ? 'Salvar' : 'Criar'}
             {/if}
           </button>
-          <button type="button" class="btn-secondary" on:click={closeModal} disabled={isSaving}>Cancel</button>
+          <button type="button" class="btn-secondary" on:click={closeModal} disabled={isSaving}>Cancelar</button>
         </div>
       </form>
     </div>
@@ -213,11 +213,11 @@
          tabindex="-1"
          on:click|stopPropagation
          on:keydown|stopPropagation>
-      <h3>Confirm Deletion</h3>
-      <p>Are you sure you want to delete this diocese? This action cannot be undone.</p>
+      <h3>Confirmar Exclusão</h3>
+      <p>Tem certeza de que deseja excluir esta diocese? Esta ação não pode ser desfeita.</p>
       <div class="confirmation-actions">
-        <button type="button" class="btn-danger" on:click={confirmDelete}>Yes, Delete</button>
-        <button type="button" class="btn-secondary" on:click={cancelDelete}>Cancel</button>
+        <button type="button" class="btn-danger" on:click={confirmDelete}>Sim, Excluir</button>
+        <button type="button" class="btn-secondary" on:click={cancelDelete}>Cancelar</button>
       </div>
     </div>
   </div>

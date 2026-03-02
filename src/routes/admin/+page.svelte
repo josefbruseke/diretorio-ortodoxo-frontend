@@ -293,7 +293,7 @@
       closeEditEntidadeModal();
       error = null; // Clear any previous errors
     } catch (e: any) {
-      error = `Failed to save entidade: ${e.message}`;
+      error = `Erro ao salvar entidade: ${e.message}`;
     }
   }
 
@@ -354,7 +354,7 @@
       closeEditDioceseModal();
       error = null; // Clear any previous errors
     } catch (e: any) {
-      error = `Failed to save diocese: ${e.message}`;
+      error = `Erro ao salvar diocese: ${e.message}`;
     }
   }
 
@@ -410,7 +410,7 @@
       closeEditCleroModal();
       error = null; // Clear any previous errors
     } catch (e: any) {
-      error = `Failed to save clero: ${e.message}`;
+      error = `Erro ao salvar clérigo: ${e.message}`;
     }
   }
 
@@ -472,7 +472,7 @@
         // Login successful, user will be set via auth state change
       }
     } catch (err) {
-      loginError = 'An unexpected error occurred';
+      loginError = 'Ocorreu um erro inesperado';
     }
   }
 
@@ -803,10 +803,10 @@
 
 <div class="container">
   {#if authLoading}
-    <p>Loading authentication...</p>
+    <p>Carregando autenticação...</p>
   {:else if $user}
-    <h1>Admin Dashboard</h1>
-    <button class="logout-btn" on:click={handleLogout}>Logout</button>
+    <h1>Painel Administrativo</h1>
+    <button class="logout-btn" on:click={handleLogout}>Sair</button>
 
     <div class="tabs">
       <button class:active={activeTable === 'entidades'} on:click={() => loadData('entidades')}>
@@ -821,7 +821,7 @@
     </div>
 
   {#if loading}
-    <p>Loading...</p>
+    <p>Carregando...</p>
   {:else if error}
     <p style="color: red;">{error}</p>
   {:else}
@@ -873,7 +873,7 @@
       </div>
 
       <div class="table-header">
-        <button class="create-btn" on:click={openCreateEntidadeModal}>Create New Entidade</button>
+        <button class="create-btn" on:click={openCreateEntidadeModal}>Criar Nova Entidade</button>
       </div>
       <table>
         <thead>
@@ -896,7 +896,7 @@
               <td>{entidade.nome}</td>
               <td>{entidade.tipo}</td>
               <td>{entidade.diocese?.nome || '-'}</td>
-              <td>{entidade.reitor ? `${entidade.reitor.titulo ? entidade.reitor.titulo + ' ' : ''}${entidade.reitor.nome_completo}` : '-'}</td>
+              <td>{entidade.reitor ? entidade.reitor.nome_completo : '-'}</td>
               <td>{entidade.cidade}</td>
               <td>{entidade.estado}</td>
               <td>
@@ -906,7 +906,7 @@
               </td>
               <td>{entidade.latitude ? entidade.latitude.toFixed(6) : '-'}</td>
               <td>{entidade.longitude ? entidade.longitude.toFixed(6) : '-'}</td>
-              <td><button on:click={() => openEditEntidadeModal(entidade)}>Edit</button></td>
+              <td><button on:click={() => openEditEntidadeModal(entidade)}>Editar</button></td>
             </tr>
           {/each}
         </tbody>
@@ -941,7 +941,7 @@
       </div>
 
       <div class="table-header">
-        <button class="create-btn" on:click={openCreateDioceseModal}>Create New Diocese</button>
+        <button class="create-btn" on:click={openCreateDioceseModal}>Criar Nova Diocese</button>
       </div>
       <table>
         <thead>
@@ -958,7 +958,7 @@
               <td>{diocese.nome}</td>
               <td>{getJurisdicaoLabel(diocese.jurisdicao as Jurisdicao)}</td>
               <td>{diocese.loc_sede}</td>
-              <td><button on:click={() => openEditDioceseModal(diocese)}>Edit</button></td>
+              <td><button on:click={() => openEditDioceseModal(diocese)}>Editar</button></td>
             </tr>
           {/each}
         </tbody>
@@ -984,7 +984,7 @@
       </div>
 
       <div class="table-header">
-        <button class="create-btn" on:click={openCreateCleroModal}>Create New Clerigo</button>
+        <button class="create-btn" on:click={openCreateCleroModal}>Criar Novo Clérigo</button>
       </div>
       <table>
         <thead>
@@ -1001,7 +1001,7 @@
               <td>{clerigo.nome_completo}</td>
               <td>{clerigo.titulo}</td>
               <td>{clerigo.email}</td>
-              <td><button on:click={() => openEditCleroModal(clerigo)}>Edit</button></td>
+              <td><button on:click={() => openEditCleroModal(clerigo)}>Editar</button></td>
             </tr>
           {/each}
         </tbody>
@@ -1046,25 +1046,25 @@
 {#if !authLoading && !$user}
 <div class="container">
   <div class="login-container">
-    <h2>Admin Login</h2>
+    <h2>Login Administrativo</h2>
     <form on:submit|preventDefault={handleLogin}>
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" bind:value={loginEmail} required />
       </div>
       <div class="form-group">
-        <label for="password">Password:</label>
+        <label for="password">Senha:</label>
         <input type="password" id="password" bind:value={loginPassword} required />
       </div>
       {#if loginError}
         <p class="error">{loginError}</p>
       {/if}
-      <button type="submit" class="login-btn">Login</button>
+      <button type="submit" class="login-btn">Entrar</button>
     </form>
     
     <div class="forgot-password">
       <button type="button" class="link-btn" on:click={() => window.location.href = '/admin/reset-password'}>
-        Forgot your password?
+        Esqueceu sua senha?
       </button>
     </div>
   </div>

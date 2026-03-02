@@ -558,7 +558,7 @@
       aria-labelledby="modal-title"
       tabindex="-1"
     >
-      <h2 id="modal-title">{entidade ? 'Edit' : 'Create'} Entidade</h2>
+      <h2 id="modal-title">{entidade ? 'Editar' : 'Criar'} Entidade</h2>
       
       {#if Object.keys(validationErrors).length > 0}
         <div class="validation-summary">
@@ -814,7 +814,7 @@
           {#if !editedEntidade.id}
             <!-- Create mode - show info message only -->
             <p class="info-message">
-              ℹ️ Salve a entidade primeiro clicando em "Create", depois você poderá adicionar imagens.
+              ℹ️ Salve a entidade primeiro clicando em "Criar", depois você poderá adicionar imagens.
             </p>
           {:else}
             <!-- Edit mode - show image gallery and upload options -->
@@ -952,16 +952,16 @@
         </div>
         <div class="actions">
           {#if entidade && entidade.id}
-            <button type="button" class="btn-danger" on:click={handleDelete} disabled={isSaving}>Delete</button>
+            <button type="button" class="btn-danger" on:click={handleDelete} disabled={isSaving}>Excluir</button>
           {/if}
           <button type="submit" class="btn-primary" disabled={isSaving}>
             {#if isSaving}
               {imageFiles.length > 0 && editedEntidade.id ? `Salvando e enviando ${imageFiles.length} imagem(ns)...` : entidade ? 'Salvando...' : 'Criando...'}
             {:else}
-              {entidade ? 'Save' : 'Create'}
+              {entidade ? 'Salvar' : 'Criar'}
             {/if}
           </button>
-          <button type="button" class="btn-secondary" on:click={closeModal} disabled={isSaving}>Cancel</button>
+          <button type="button" class="btn-secondary" on:click={closeModal} disabled={isSaving}>Cancelar</button>
         </div>
       </form>
     </div>
@@ -980,11 +980,11 @@
          tabindex="-1"
          on:click|stopPropagation
          on:keydown|stopPropagation>
-      <h3>Confirm Deletion</h3>
-      <p>Are you sure you want to delete this entidade? This action cannot be undone.</p>
+      <h3>Confirmar Exclusão</h3>
+      <p>Tem certeza de que deseja excluir esta entidade? Esta ação não pode ser desfeita.</p>
       <div class="confirmation-actions">
-        <button type="button" class="btn-danger" on:click={confirmDelete}>Yes, Delete</button>
-        <button type="button" class="btn-secondary" on:click={cancelDelete}>Cancel</button>
+        <button type="button" class="btn-danger" on:click={confirmDelete}>Sim, Excluir</button>
+        <button type="button" class="btn-secondary" on:click={cancelDelete}>Cancelar</button>
       </div>
     </div>
   </div>
