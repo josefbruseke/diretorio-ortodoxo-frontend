@@ -94,6 +94,21 @@
     font-size: 0.875rem;
   }
 
+  .footer-developer {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+
+  .footer-developer a {
+    color: var(--cor-ouro-bizantino);
+    text-decoration: none;
+  }
+
+  .footer-developer a:hover {
+    text-decoration: underline;
+  }
+
   @media (max-width: 768px) {
     .jurisdiction-seals {
       justify-content: center;
@@ -147,5 +162,8 @@
   
   <div class="footer-bottom">
     © {new Date().getFullYear()} Ecclesia - Diretório Ortodoxo Brasil. Todos os direitos reservados.
+    <p class="footer-developer">
+      Developed and maintained by <a href="https://www.linkedin.com/in/josefbruseke/" target="_blank" rel="noopener noreferrer">Josef Bruseke</a>
+    </p>
   </div>
 </footer>
