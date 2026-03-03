@@ -156,7 +156,6 @@
   }
 
   .about-header {
-    background: url('/capa-diretorio-3.png') center/cover no-repeat;
     color: white;
     padding: 2rem 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

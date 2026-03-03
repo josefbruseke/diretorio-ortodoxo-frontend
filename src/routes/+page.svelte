@@ -979,7 +979,7 @@
   }
 
   .header {
-    background: url('/capa-diretorio-3.png');
+    background: url('/capa-diretorio-4.jpeg');
     background-size: cover;
     background-position: center 40%;
     background-repeat: no-repeat;
@@ -1010,7 +1010,7 @@
   }
 
   .nav-link {
-    color: #2c2c2c;
+    color: #ffffff;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
