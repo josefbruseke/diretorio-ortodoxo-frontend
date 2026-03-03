@@ -23,8 +23,7 @@
       id: 0,
       nome_completo: '',
       titulo: '',
-      email: '',
-      id_diocese_auxiliar: null
+      email: ''
     };
   }
 

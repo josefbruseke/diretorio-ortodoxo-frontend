@@ -381,8 +381,7 @@
       const dataToSave: Partial<ApiClero> = {
         nome_completo: updatedClero.nome_completo,
         titulo: updatedClero.titulo,
-        email: updatedClero.email,
-        id_diocese_auxiliar: updatedClero.id_diocese_auxiliar
+        email: updatedClero.email
       };
       
       let savedClero: ApiClero | undefined;

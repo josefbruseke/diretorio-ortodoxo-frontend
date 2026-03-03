@@ -307,9 +307,13 @@ export class DataService {
         const result = await supabaseService.updateDiocese(id, supabaseData);
         return mapSupabaseDioceseToLocal(result);
       } catch (error) {
-        console.error('Supabase error, falling back to API:', error);
-        this.useSupabase = false;
+        console.error('Erro ao atualizar diocese no Supabase:', error);
+        throw error; // Don't fallback, just throw the error
       }
+    }
+    
+    if (!this.apiAvailable) {
+      throw new Error('API não está disponível. Configure o Supabase ou inicie o backend.');
     }
     
     // Fallback to API
@@ -329,9 +333,13 @@ export class DataService {
         const result = await supabaseService.updateClero(id, supabaseData);
         return result;
       } catch (error) {
-        console.error('Supabase error, falling back to API:', error);
-        this.useSupabase = false;
+        console.error('Erro ao atualizar clérigo no Supabase:', error);
+        throw error; // Don't fallback, just throw the error
       }
+    }
+    
+    if (!this.apiAvailable) {
+      throw new Error('API não está disponível. Configure o Supabase ou inicie o backend.');
     }
     
     // Fallback to API
@@ -400,9 +408,13 @@ export class DataService {
         const result = await supabaseService.createDiocese(supabaseData);
         return mapSupabaseDioceseToLocal(result);
       } catch (error) {
-        console.error('Supabase error, falling back to API:', error);
-        this.useSupabase = false;
+        console.error('Erro ao criar diocese no Supabase:', error);
+        throw error; // Don't fallback, just throw the error
       }
+    }
+    
+    if (!this.apiAvailable) {
+      throw new Error('API não está disponível. Configure o Supabase ou inicie o backend.');
     }
     
     // Fallback to API
@@ -417,15 +429,18 @@ export class DataService {
           nome_completo: data.nome_completo,
           titulo: data.titulo,
           email: data.email,
-          id_diocese_auxiliar: data.id_diocese_auxiliar
         };
         
         const result = await supabaseService.createClero(supabaseData);
         return result;
       } catch (error) {
-        console.error('Supabase error, falling back to API:', error);
-        this.useSupabase = false;
+        console.error('Erro ao criar clérigo no Supabase:', error);
+        throw error; // Don't fallback, just throw the error
       }
+    }
+    
+    if (!this.apiAvailable) {
+      throw new Error('API não está disponível. Configure o Supabase ou inicie o backend.');
     }
     
     // Fallback to API

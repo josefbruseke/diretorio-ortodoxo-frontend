@@ -86,7 +86,6 @@ export interface ApiClero {
   nome_completo: string;
   titulo: string;
   email: string;
-  id_diocese_auxiliar: number | null;
 }
 
 export interface ApiCleroResponse {

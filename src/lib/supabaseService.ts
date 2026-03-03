@@ -47,7 +47,6 @@ export interface SupabaseClero {
   id: number;
   nome_completo: string;
   titulo?: string;
-  id_diocese_auxiliar?: number;
   email?: string;
 }
 
@@ -422,9 +421,11 @@ class SupabaseService {
   }
 
   async createClero(data: Omit<SupabaseClero, 'id'>): Promise<SupabaseClero> {
+    // Ensure id is never sent - let the database auto-generate it
+    const { id: _id, ...cleanData } = data as any;
     const { data: result, error } = await supabase
       .from('clero')
-      .insert(data)
+      .insert(cleanData)
       .select()
       .single();
 
