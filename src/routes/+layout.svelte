@@ -11,7 +11,6 @@
     background: var(--cor-azul-marinho-escuro);
     color: white;
     padding: 2rem 1rem;
-    margin-top: 3rem;
   }
 
   .footer-content {
@@ -45,6 +44,11 @@
   @media (max-width: 768px) {
     .footer-content {
       grid-template-columns: 1fr;
+    }
+
+    .footer-section:nth-child(2),
+    .footer-section:nth-child(3) {
+      justify-self: start;
     }
   }
 

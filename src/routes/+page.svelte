@@ -627,7 +627,7 @@
       <section class="mobile-filters">
         <!-- Busca Textual Mobile -->
         <div class="mobile-filter-item">
-          <div class="mobile-filter-label">🔍 Buscar:</div>
+          <div class="mobile-filter-label">Buscar:</div>
           <div class="search-container">
             <input 
               type="text" 
@@ -1762,29 +1762,34 @@
     }
     
     .header {
-      padding: 1.5rem 1rem;
+      padding: 1rem;
+      min-height: 160px;
+      background-position: 60% 30%;
+      overflow: visible;
     }
-    
+
     .header-content {
       flex-direction: row;
-      gap: 0.5rem;
+      gap: 0.25rem;
       justify-content: flex-end;
       padding-top: 0;
     }
-    
+
     .logo-section .main-title {
       font-size: 2.2rem;
       letter-spacing: 2px;
     }
-    
+
     .header-nav {
-      gap: 1rem;
-      justify-content: center;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
-    
+
     .nav-link {
-      font-size: 0.8rem;
-      padding: 0.4rem 0.8rem;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.4rem;
+      letter-spacing: 0.5px;
     }
 
     .sidebar {
@@ -1829,7 +1834,7 @@
 
     .mobile-clear-filters-btn {
       width: 100%;
-      background: linear-gradient(135deg, #dc3545, #c82333);
+      background: var(--cor-azul-constantinopolitano);
       color: white;
       border: none;
       padding: 0.75rem 1rem;
@@ -1839,13 +1844,13 @@
       font-size: 0.9rem;
       font-weight: 600;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+      box-shadow: 0 2px 4px rgba(42, 77, 122, 0.2);
     }
 
     .mobile-clear-filters-btn:hover {
-      background: linear-gradient(135deg, #c82333, #bd2130);
+      background: var(--cor-azul-marinho-escuro);
       transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+      box-shadow: 0 4px 8px rgba(42, 77, 122, 0.3);
     }
 
     .mobile-clear-filters-btn:disabled {
