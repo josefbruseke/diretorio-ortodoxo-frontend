@@ -515,10 +515,25 @@ export class DataService {
         this.useSupabase = false;
       }
     }
-    
+
     // Fallback to API
     const response = await apiService.getClero(fetchFn);
     return response.clero;
+  }
+
+  async getCleroById(id: number): Promise<any | null> {
+    if (this.useSupabase) {
+      try {
+        return await supabaseService.getCleroById(id);
+      } catch (error) {
+        console.error('Supabase error, falling back to API:', error);
+        this.useSupabase = false;
+      }
+    }
+
+    // Fallback: busca todos e filtra pelo id
+    const todos = await this.getClero();
+    return todos.find((c: any) => c.id === id) ?? null;
   }
 }
 

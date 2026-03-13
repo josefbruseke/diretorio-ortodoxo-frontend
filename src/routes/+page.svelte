@@ -437,6 +437,7 @@
       </div>
       <nav class="header-nav">
         <a href="https://ecclesia.org.br" target="_blank" rel="noopener noreferrer" class="nav-link">ECCLESIA.ORG</a>
+        <!-- <a href="/clero" class="nav-link">CLERO</a> -->
         <a href="/sobre" class="nav-link">SOBRE</a>
         <a href="#footer" class="nav-link">CONTATO</a>
       </nav>
@@ -1764,7 +1765,7 @@
     .header {
       padding: 1rem;
       min-height: 160px;
-      background-position: 60% 30%;
+      background-position: 60% 30%; 
       overflow: visible;
     }
 
@@ -1773,11 +1774,6 @@
       gap: 0.25rem;
       justify-content: flex-end;
       padding-top: 0;
-    }
-
-    .logo-section .main-title {
-      font-size: 2.2rem;
-      letter-spacing: 2px;
     }
 
     .header-nav {
