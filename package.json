@@ -50,6 +50,7 @@
 	],
 	"dependencies": {
 		"@supabase/supabase-js": "^2.57.4",
+		"@vercel/analytics": "^2.0.1",
 		"leaflet": "^1.9.4",
 		"leaflet.markercluster": "^1.5.3"
 	}
