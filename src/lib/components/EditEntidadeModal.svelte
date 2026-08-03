@@ -8,6 +8,7 @@
   import { fade } from 'svelte/transition';
   import { getJurisdicaoLabel } from '../utils.js';
   import type { Jurisdicao } from '../types.js';
+  import { ESTADOS_BRASIL } from '../estados.js';
 
   export let entidade: ApiEntidade | null = null;
   export let showModal: boolean;
@@ -16,7 +17,6 @@
 
   let editedEntidade: ApiEntidade;
   let tipos: string[] = [];
-  let estados: string[] = [];
   let dioceses: ApiDiocese[] = [];
   let cleroList: ApiClero[] = [];
   let cleroSearchQuery: string = '';
@@ -130,8 +130,7 @@
   onMount(async () => {
     try {
       tipos = await dataService.getTipos();
-      estados = await dataService.getEstados();
-      
+
       // Load dioceses
       const diocesesData = await dataService.getDioceses();
       dioceses = diocesesData.map(d => ({
@@ -719,8 +718,8 @@
             required
           >
             <option value="">Selecione um estado</option>
-            {#each estados as estado}
-              <option value={estado}>{estado}</option>
+            {#each ESTADOS_BRASIL as estado}
+              <option value={estado.sigla}>{estado.sigla} - {estado.nome}</option>
             {/each}
           </select>
           {#if validationErrors.estado}
